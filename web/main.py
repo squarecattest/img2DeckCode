@@ -7,13 +7,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 
-# 1. 自動定位路徑
-WEB_DIR = Path(__file__).parent.absolute()      # web/ 資料夾
-BASE_DIR = WEB_DIR.parent.absolute()            # 專案根目錄
+WEB_DIR = Path(__file__).parent.absolute()      
+BASE_DIR = WEB_DIR.parent.absolute()            
 OUTPUT_DIR = BASE_DIR / "output"
 DATA_DIR = BASE_DIR / "data"
 
-# 2. 強制加入根目錄到 Python 路徑，確保能 import src.recognizer
 sys.path.append(str(BASE_DIR))
 try:
     from src.recognizer import CardRecognizer
@@ -23,7 +21,6 @@ except ImportError:
 
 app = FastAPI()
 
-# 3. 掛載資料夾 (使用絕對路徑)
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(WEB_DIR)), name="static")
 app.mount("/output", StaticFiles(directory=str(OUTPUT_DIR)), name="output")
@@ -72,5 +69,4 @@ async def websocket_endpoint(websocket: WebSocket, mode: str = Query("GRID")):
 
 if __name__ == "__main__":
     import uvicorn
-    # 這裡的 'web.main:app' 告訴 uvicorn 去 web 資料夾下的 main.py 找 app
     uvicorn.run("web.main:app", host="0.0.0.0", port=8000, reload=True)
