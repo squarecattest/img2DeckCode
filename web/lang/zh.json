@@ -1,6 +1,6 @@
 {
     "title": "Deck Recognizer",
-    "desc": "上傳截圖以獲取數據與 Neuron 程式碼",
+    "desc": "上傳截圖以獲取牌組資訊與 Neuron ID",
     "mode_label": "辨識模式",
     "mode_grid": "自動網格推論 (全解析度)",
     "mode_fixed": "WIP: 60卡模式 (強制校準)",
