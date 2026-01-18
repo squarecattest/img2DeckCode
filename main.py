@@ -80,7 +80,7 @@ async def websocket_endpoint(websocket: WebSocket, mode: str = Query("GRID")):
 
 # --- 2. HTTP API (Discord Bot 用) ---
 @app.post("/api/recognize")
-async def api_recognize(mode: str = "GRID", file: UploadFile = File(...)):
+async def api_recognize(mode: str = "GRID", file: UploadFile = File(...), progressor=None):
     loop = asyncio.get_event_loop()
     try:
         image_bytes = await file.read()
@@ -96,7 +96,7 @@ async def api_recognize(mode: str = "GRID", file: UploadFile = File(...)):
         final_output, grid_img_rel_path = await loop.run_in_executor(
             None,
             partial(recognizer.process_image_sync, image, mode=mode, 
-                    user_id="dc_bot", session_id=session_id)
+                    user_id="dc_bot", session_id=session_id, progressor = progressor)
         )
 
         return {

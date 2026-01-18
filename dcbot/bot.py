@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 from description import get_localizations, get_localization_value
+import asyncio
+from tqdm import tqdm
 from fastapi.responses import JSONResponse
 from typing import Any
 
@@ -54,6 +56,49 @@ def _format_embed(ctx: discord.ApplicationContext, output: dict[str, Any]) -> di
     )
 
 
+class RecognizeProgresser:
+    def __init__(self, ctx: discord.ApplicationContext) -> None:
+        self.ctx = ctx
+        self.curr = 0
+        self.length = None
+        self.finished = False
+        self.event = asyncio.Event()
+
+    def setup(self, length: int) -> None:
+        self.length = length
+        self.tqdm = tqdm(total=length, ncols=30, bar_format="{percentage:3.0f}% |{bar}|", ascii="╴█")
+        self.event.set()
+
+    def progress(self) -> None:
+        self.curr += 1
+        self.tqdm.update()
+        self.event.set()
+
+    @property
+    def text(self) -> str:
+        return tqdm.format_meter(**self.tqdm.format_dict)
+    
+    @property
+    def embed(self) -> discord.Embed:
+        return discord.Embed(
+            color=discord.Color.green(),
+            title="Progressing",
+            description=self.text
+        )
+
+    async def trace_progress(self) -> None:
+        while not self.finished:
+            await self.event.wait()
+            await self.ctx.edit(embed=self.embed)
+            self.event.clear()
+
+
+async def _recognize(image: discord.Attachment, progressor: RecognizeProgresser, other_task: asyncio.Task) -> JSONResponse | dict[str, Any]:
+    response = await api_recognize(file=image, progressor=progressor)
+    other_task.cancel()
+    return response
+
+
 class ImgrecCog(commands.Cog):
     @discord.slash_command(
         description=get_localization_value("recognize.description"), 
@@ -61,7 +106,11 @@ class ImgrecCog(commands.Cog):
     )
     async def recognize(self, ctx: discord.ApplicationContext, image: discord.Option(discord.Attachment, description=get_localization_value("recognize.desc_image"), description_localizations=get_localizations("recognize.desc_image"))):
         await ctx.defer()
-        response = await api_recognize(file=image)
+        progressor = RecognizeProgresser(ctx)
+        async with asyncio.TaskGroup() as tg:
+            t1 = tg.create_task(progressor.trace_progress())
+            t2 = tg.create_task(_recognize(image, progressor, t1))
+        response = t2.result()
         del image
         if isinstance(response, JSONResponse):
             embed = discord.Embed(
@@ -69,10 +118,10 @@ class ImgrecCog(commands.Cog):
                 title=":no_entry: Error",
                 description=response.body.decode()
             )
-            return await ctx.interaction.respond(embed=embed)
+            return await ctx.edit(embed=embed)
         
         data = response["data"]
         # TODO: data process
-        await ctx.respond(embed=_format_embed(ctx, output=data))
+        await ctx.edit(embed=_format_embed(ctx, output=data))
         
 

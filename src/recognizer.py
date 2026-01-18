@@ -180,7 +180,7 @@ class CardRecognizer:
                 best_cand = {"id": cid, "name": info["name"], "type": info["type"], "p_dist": int(dist)}
         return best_cand, art_roi
 
-    def process_image_sync(self, image, mode="GRID", user_id="web_user", session_id=None, progress_sync_callback=None):
+    def process_image_sync(self, image, mode="GRID", user_id="web_user", session_id=None, progress_sync_callback=None, progressor=None):
         img_h, img_w = image.shape[:2]
         session_id = session_id or datetime.now().strftime('%Y%m%d_%H%M%S')
         debug_path = self.base_dir / 'output' / user_id / f"session_{session_id}"
@@ -189,6 +189,9 @@ class CardRecognizer:
         grid = self._get_grid_by_inference(image, session_path=debug_path)
         ratios = self.ratios_grid
         raw_results, canvas = [], image.copy()
+
+        if progressor:
+            progressor.setup(len(grid))
 
         for i, box in enumerate(grid):
             rx, ry, rw, rh = int(box['x']), int(box['y']), int(box['w']), int(box['h'])
@@ -224,6 +227,10 @@ class CardRecognizer:
             if progress_sync_callback:
                 progress_sync_callback(i + 1, len(grid), match['name'])
 
+            if progressor:
+                progressor.progress()
+
+        progressor.finished = True
         final_json = self._format_output(raw_results, user_id)
         cv2.imwrite(str(debug_path / "_full_grid.jpg"), canvas)
         with open(debug_path / "deck_result.json", "w", encoding="utf-8") as f: 
