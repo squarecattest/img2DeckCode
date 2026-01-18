@@ -1,9 +1,13 @@
 import discord
 from discord.ext import commands
 from description import get_localizations, get_localization_value
-from web.main import api_recognize
 from fastapi.responses import JSONResponse
 from typing import Any
+
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
+from main import api_recognize
 
 def _format_embed(ctx: discord.ApplicationContext, output: dict[str, Any]) -> discord.Embed:
     monster_cards = output["main_deck"]["Monster"]
@@ -48,9 +52,6 @@ def _format_embed(ctx: discord.ApplicationContext, output: dict[str, Any]) -> di
         author=discord.EmbedAuthor(ctx.user.name, icon_url=ctx.user.avatar.url),
         description=content
     )
-
-        
-
 
 
 class ImgrecCog(commands.Cog):
