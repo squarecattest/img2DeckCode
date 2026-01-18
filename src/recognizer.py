@@ -229,8 +229,8 @@ class CardRecognizer:
 
             if progressor:
                 progressor.progress()
-
-        progressor.finished = True
+        if progressor:
+            progressor.finished = True
         final_json = self._format_output(raw_results, user_id)
         cv2.imwrite(str(debug_path / "_full_grid.jpg"), canvas)
         with open(debug_path / "deck_result.json", "w", encoding="utf-8") as f: 
