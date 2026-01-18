@@ -8,6 +8,16 @@ You can upload deck photos and receive a complete deck list, including card name
 The application can be deployed locally as a web service, providing a browser-based interface for image upload and result viewing. 
 It also exposes an API that allows external clients, such as Discord bots, to submit images and retrieve deck data programmatically.
 
+## ✏️ TODO
+
+- [ ] Generate Neuron Deck IDs
+
+- [ ] Implement language selection for the webpage
+
+- [ ] Enhance Pendulum Monster recognition
+
+- [ ] Optimize recognition for 60-card decks
+
 ## 🛠️ Setup Instructions
 
 ### 1️⃣ Clone the Repository
