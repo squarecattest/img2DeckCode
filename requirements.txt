@@ -1,6 +1,11 @@
-requests
+fastapi
+uvicorn
+python-multipart
+websockets
 opencv-python
-Pillow
-ImageHash
 numpy
-json
+imagehash
+pillow
+requests
+tqdm
+aiohttp
