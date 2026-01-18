@@ -52,7 +52,7 @@ python -m pip install -r requirements.txt
 ## ▶️ How to Run
 
 ```bash
-python ./web/main.py
+python ./main.py
 ```
 
 ```bash
