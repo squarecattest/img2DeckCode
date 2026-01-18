@@ -1,0 +1,14 @@
+{
+    "recognize": {
+        "description": {
+            "en-US": "Recognize cards from a screenshot of the deck",
+            "zh-TW": "從牌組截圖中辨識出牌組中的卡片",
+            "ja": "デッキのスクショでカードを認識"
+        },
+        "desc_image": {
+            "en-US": "The screenshot of the deck",
+            "zh-TW": "牌組截圖",
+            "ja": "デッキのスクショ"
+        }
+    }
+}
