@@ -36,7 +36,7 @@ cd img2DeckCode
 
 ### 3️⃣ Install Python 🐍
 
-Ensure Python 3.10 or above is installed. If not, download it:  
+Ensure Python 3.10 is installed. If not, download it:  
 👉 [Download Python](https://www.python.org/downloads/)
 
 ## 📦 Install Dependencies
