@@ -12,11 +12,11 @@ It also exposes an API that allows external clients, such as Discord bots, to su
 
 - [ ] Generate Neuron Deck IDs
 
-- [ ] Implement language selection for the webpage
-
 - [ ] Enhance Pendulum Monster recognition
 
 - [ ] Optimize recognition for 60-card decks
+
+- [x] Implement language selection for the webpage
 
 ## 🛠️ Setup Instructions
 
