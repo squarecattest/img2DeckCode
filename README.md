@@ -2,7 +2,7 @@ Master Duel Deck Code Converter
 ===
 ## 🚀 Overview
 
-This tool automatically converts Yu-Gi-Oh! deck images into structured deck information and a Neuron deck code. 
+This tool automatically converts Yu-Gi-Oh! Master Duel deck images into structured deck information and a Neuron deck code. 
 You can upload deck photos and receive a complete deck list, including card names, quantities and Neuron deck code.
 
 The application can be deployed locally as a web service, providing a browser-based interface for image upload and result viewing. 
