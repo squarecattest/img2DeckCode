@@ -1,0 +1,16 @@
+{
+    "title": "Deck Recognizer",
+    "desc": "上傳截圖以獲取數據與 Neuron 程式碼",
+    "mode_label": "辨識模式",
+    "mode_grid": "自動網格推論 (全解析度)",
+    "mode_fixed": "WIP: 60卡模式 (強制校準)",
+    "upload_text": "點擊此處或拖放卡表圖片",
+    "btn_start": "開始分析卡表",
+    "status_ready": "準備中...",
+    "status_processing": "辨識中: ",
+    "status_done": "辨識完成！",
+    "res_img": "辨識結果圖 (Detection Canvas)",
+    "res_json": "卡表清單 (Formatted JSON)",
+    "error_file": "請先選擇圖片",
+    "error_ws": "連線發生錯誤"
+}

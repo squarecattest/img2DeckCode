@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yu-Gi-Oh! Master Duel Deck Recognizer</title>
+    <title>Yu-Gi-Oh! Deck Recognizer</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
 
+<div class="lang-container">
+    <select id="langSelect">
+        <option value="zh">繁體中文</option>
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+    </select>
+</div>
+
 <div class="floating-info">
     <div class="avatar-container">
         <img src="static/img/U_dmcc_friend.png" alt="Avatar" class="avatar" onerror="this.src='https://via.placeholder.com/70';">
     </div>
-    <span>貓又 CatAgain</span>
+    <span>catagain</span>
     <a href="https://github.com/catagain/img2DeckCode" target="_blank">
         <svg height="16" width="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
         GitHub
@@ -22,26 +30,26 @@
 
 <div class="container">
     <header>
-        <h1>Master Duel Deck Recognizer</h1>
-        <p class="desc">Upload an image to retrieve structured deck data and a Neuron deck code.</p>
+        <h1 data-i18n="title">Deck Recognizer</h1>
+        <p class="desc" data-i18n="desc">Upload an image to retrieve structured deck data and a Neuron deck code.</p>
     </header>
 
     <div class="config-section">
         <div class="control-group">
-            <label>辨識模式</label>
+            <label data-i18n="mode_label">辨識模式</label>
             <select id="modeSelect">
-                <option value="GRID">自動網格推論 (適合各種尺寸/解析度)</option>
-                <option value="TEMPLATE_60">WIP: 60卡模式 (使用 60 卡模板強制校準)</option>
+                <option value="GRID" data-i18n="mode_grid">自動網格推論 (適合各種尺寸/解析度)</option>
+                <option value="TEMPLATE_60" data-i18n="mode_fixed">WIP: 60卡模式 (使用 60 卡模板強制校準)</option>
             </select>
         </div>
 
         <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
             <input type="file" id="fileInput" accept="image/*" style="display: none;">
-            <div id="uploadText">點擊此處或拖放卡表圖片</div>
+            <div id="uploadText" data-i18n="upload_text">點擊此處或拖放卡表圖片</div>
             <img id="previewImg" alt="預覽圖">
         </div>
         
-        <button id="processBtn" disabled>開始分析卡表</button>
+        <button id="processBtn" disabled data-i18n="btn_start">開始分析卡表</button>
     </div>
 
     <div class="progress-box" id="progressBox">
@@ -49,20 +57,20 @@
             <div class="progress-bar" id="progressBar"></div>
         </div>
         <div class="progress-info">
-            <span id="statusLabel" class="status-msg">準備中...</span>
+            <span id="statusLabel" class="status-msg" data-i18n="status_ready">準備中...</span>
             <span id="countLabel">0 / 0</span>
         </div>
     </div>
 
     <div class="results-section">
         <div class="result-card" id="imageResultCard">
-            <h3>辨識結果圖 (Detection Canvas)</h3>
+            <h3 data-i18n="res_img">辨識結果圖 (Detection Canvas)</h3>
             <img id="fullGridImg" src="" alt="最終標記圖">
         </div>
 
         <div class="result-card" id="jsonResultCard">
-            <h3>卡表清單 (Formatted JSON)</h3>
-            <pre><code id="jsonOutput" class="language-json">等待分析...</code></pre>
+            <h3 data-i18n="res_json">卡表清單 (Formatted JSON)</h3>
+            <pre><code id="jsonOutput" class="language-json"></code></pre>
         </div>
     </div>
 </div>

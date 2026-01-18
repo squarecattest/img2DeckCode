@@ -17,7 +17,7 @@ class CardRecognizer:
     except AttributeError:
         RESAMPLE_METHOD = Image.LANCZOS
 
-    def __init__(self, confidence_threshold=100):
+    def __init__(self, confidence_threshold = 90):
         self.threshold = confidence_threshold
         self.base_dir = Path(__file__).parent.parent.absolute()
         self.id_db, self.hash_db = self._load_databases()

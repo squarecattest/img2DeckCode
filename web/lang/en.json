@@ -1,0 +1,16 @@
+{
+    "title": "Deck Recognizer",
+    "desc": "Upload screenshots to get structured data and Neuron codes.",
+    "mode_label": "Recognition Mode",
+    "mode_grid": "Auto Grid Inference (All Resolutions)",
+    "mode_fixed": "WIP: 60-Card Mode (Fixed Calibration)",
+    "upload_text": "Click here or drag & drop deck image",
+    "btn_start": "Start Analysis",
+    "status_ready": "Ready...",
+    "status_processing": "Processing: ",
+    "status_done": "Analysis Complete!",
+    "res_img": "Detection Canvas",
+    "res_json": "Deck List (Formatted JSON)",
+    "error_file": "Please select an image first.",
+    "error_ws": "Connection Error"
+}

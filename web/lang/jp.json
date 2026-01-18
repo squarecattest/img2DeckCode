@@ -1,0 +1,16 @@
+{
+    "title": "デッキ認識器",
+    "desc": "スクリーンショットをアップロードして、デッキデータとNeuronコードを取得します。",
+    "mode_label": "認識モード",
+    "mode_grid": "自動グリッド推論 (全解像度対応)",
+    "mode_fixed": "WIP: 60枚モード (強制キャリブレーション)",
+    "upload_text": "ここをクリック、または画像をドラッグ＆ドロップ",
+    "btn_start": "分析を開始",
+    "status_ready": "準備中...",
+    "status_processing": "認識中: ",
+    "status_done": "認識完了！",
+    "res_img": "認識結果画像 (Detection Canvas)",
+    "res_json": "デッキリスト (Formatted JSON)",
+    "error_file": "先に画像を選択してください。",
+    "error_ws": "接続エラーが発生しました"
+}
