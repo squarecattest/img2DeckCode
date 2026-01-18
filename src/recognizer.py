@@ -17,7 +17,7 @@ class CardRecognizer:
     except AttributeError:
         RESAMPLE_METHOD = Image.LANCZOS
 
-    def __init__(self, confidence_threshold = 90):
+    def __init__(self, confidence_threshold=90):
         self.threshold = confidence_threshold
         self.base_dir = Path(__file__).parent.parent.absolute()
         self.id_db, self.hash_db = self._load_databases()
@@ -27,7 +27,6 @@ class CardRecognizer:
         
         self.retry_p_threshold = 80
         self.shift_step = 0.04 
-        self.current_session_path = None
 
     def _load_databases(self):
         data_folder = self.base_dir / 'data'
@@ -45,22 +44,24 @@ class CardRecognizer:
         s = filename.replace(" ", "_")
         return re.sub(r'(?u)[^-\w.]', '', s)
 
-    def _get_grid_by_inference(self, image):
+    def _get_grid_by_inference(self, image, session_path=None):
         img_h, img_w = image.shape[:2]
-        
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        if self.current_session_path: cv2.imwrite(str(self.current_session_path / "debug_1_gray.jpg"), gray)
+        if session_path: cv2.imwrite(str(session_path / "debug_1_gray.jpg"), gray)
+        
         blurred = cv2.medianBlur(gray, 5)
-        if self.current_session_path: cv2.imwrite(str(self.current_session_path / "debug_2_blurred.jpg"), blurred)
+        if session_path: cv2.imwrite(str(session_path / "debug_2_blurred.jpg"), blurred)
+        
         edged = cv2.Canny(blurred, 40, 80)
-        if self.current_session_path: cv2.imwrite(str(self.current_session_path / "debug_3_edged.jpg"), edged)
+        if session_path: cv2.imwrite(str(session_path / "debug_3_edged.jpg"), edged)
+        
         dilated = cv2.dilate(edged, cv2.getStructuringElement(cv2.MORPH_RECT, (1, 3)), iterations=1)
-        if self.current_session_path: cv2.imwrite(str(self.current_session_path / "debug_4_dilated.jpg"), dilated)
+        if session_path: cv2.imwrite(str(session_path / "debug_4_dilated.jpg"), dilated)
 
         contours, _ = cv2.findContours(dilated, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-        
-        candidates_img = image.copy()
         raw_boxes = []
+        candidates_img = image.copy()
+        
         for c in contours:
             area = cv2.contourArea(c)
             if (img_h * img_w * 0.002) < area < (img_h * img_w * 0.1):
@@ -71,7 +72,6 @@ class CardRecognizer:
 
         if not raw_boxes: return []
 
-        # 分排
         raw_boxes.sort(key=lambda b: b['y'])
         rows_data = []
         current_row = [raw_boxes[0]]
@@ -109,18 +109,14 @@ class CardRecognizer:
         def process_and_fill_full(rows_to_process, ref_w, ref_h, ref_gap, label_prefix, color_start_idx):
             for r_idx, row in enumerate(rows_to_process):
                 row_y = int(np.mean([b['y'] for b in row]))
-                # 篩選出高品質的原始框 (寬高與中位數落差在15%內)
                 valid_anchors = [b for b in row if abs(b['w'] - ref_w) < ref_w * 0.15 and abs(b['h'] - ref_h) < ref_h * 0.15]
                 anchor_xs = {b['x']: b for b in valid_anchors}
-                
                 det_xs = sorted(list(anchor_xs.keys()))
                 if not det_xs: continue 
 
-                # 決定起始點
                 left_anchor = min(det_xs)
                 while left_anchor - ref_gap > (img_w * 0.03): left_anchor -= ref_gap
                 
-                # 生成網格序列
                 curr_x = left_anchor
                 potential_xs = []
                 while curr_x + ref_w < (img_w * 0.98):
@@ -128,7 +124,6 @@ class CardRecognizer:
 
                 color = row_colors[(color_start_idx + r_idx) % len(row_colors)]
                 for fx in potential_xs:
-                    # 尋找是否有現存的錨點可以匹配 (容許40%寬度的偏移)
                     matched_anchor = None
                     for ax in det_xs:
                         if abs(fx - ax) < (ref_w * 0.4):
@@ -136,11 +131,9 @@ class CardRecognizer:
                             break
                     
                     if matched_anchor:
-                        # 使用原始精確座標，不改動它
                         target_box = matched_anchor
                         is_inferred = False
                     else:
-                        # 補位邏輯
                         target_box = {'x': fx, 'y': row_y, 'w': ref_w, 'h': ref_h}
                         is_inferred = True
                     
@@ -158,10 +151,9 @@ class CardRecognizer:
             e_ref = get_global_ref(extra_deck_rows)
             if e_ref: process_and_fill_full(extra_deck_rows, e_ref[0], e_ref[1], e_ref[2], "E", len(main_deck_rows))
 
-        if self.current_session_path:
-            cv2.imwrite(str(self.current_session_path / "debug_5_candidates.jpg"), candidates_img)
+        if session_path:
+            cv2.imwrite(str(session_path / "debug_5_candidates.jpg"), candidates_img)
         
-        self._log(f"網格推算完成：共 {len(final_grid)} 個卡槽 (已保留優質原始框)")
         return final_grid
 
     def _extract_art_and_match(self, card_crop, ratios, x_shift_pixel=0):
@@ -170,11 +162,14 @@ class CardRecognizer:
         ax1, ax2 = int(rw*ratios['ax1']) + x_shift_pixel, int(rw*ratios['ax2']) + x_shift_pixel
         ax1, ax2 = max(0, ax1), min(rw, ax2)
         art_roi = card_crop[ay1:ay2, ax1:ax2]
+        
         if art_roi.size == 0: return {"name": "Unknown", "type": "Unknown", "p_dist": 999}, None
         gray = cv2.cvtColor(art_roi, cv2.COLOR_BGR2GRAY)
         if np.std(gray) < 15: return {"name": "Empty Slot", "type": "None", "p_dist": 999}, None
+        
         pil_img = Image.fromarray(cv2.cvtColor(art_roi, cv2.COLOR_BGR2RGB)).resize((128, 128), self.RESAMPLE_METHOD)
         curr_hash = imagehash.phash(pil_img, hash_size=16)
+        
         best_cand, min_dist = {"name": "Unknown", "type": "Unknown", "p_dist": 999}, 999
         for cid, data in self.hash_db.items():
             dist = curr_hash - imagehash.hex_to_hash(data["phash"])
@@ -184,14 +179,14 @@ class CardRecognizer:
                 best_cand = {"id": cid, "name": info["name"], "type": info["type"], "p_dist": int(dist)}
         return best_cand, art_roi
 
-    async def process_image_async(self, image, mode="GRID", user_id="web_user", progress_callback=None):
+    # 核心辨識函式改為同步，由 main.py 使用 executor 呼叫
+    def process_image_sync(self, image, mode="GRID", user_id="web_user", session_id=None, progress_sync_callback=None):
         img_h, img_w = image.shape[:2]
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        debug_path = self.base_dir / 'output' / user_id / f"session_{timestamp}"
+        session_id = session_id or datetime.now().strftime('%Y%m%d_%H%M%S')
+        debug_path = self.base_dir / 'output' / user_id / f"session_{session_id}"
         debug_path.mkdir(parents=True, exist_ok=True)
-        self.current_session_path = debug_path
         
-        grid = self._get_grid_by_inference(image)
+        grid = self._get_grid_by_inference(image, session_path=debug_path)
         ratios = self.ratios_grid
         raw_results, canvas = [], image.copy()
 
@@ -200,11 +195,9 @@ class CardRecognizer:
             crop = image[max(0,ry):min(img_h,ry+rh), max(0,rx):min(img_w,rx+rw)]
             if crop.size == 0: continue
 
-            # 原始辨識
             match, art = self._extract_art_and_match(crop, ratios, 0)
             p_initial = match['p_dist']
             
-            # 遞進式滑動辨識 (不輸出中間過程圖)
             if match['p_dist'] > self.retry_p_threshold and match['name'] != "Empty Slot":
                 best_match, best_art = match, art
                 for level in [1, 2, 3]:
@@ -216,11 +209,9 @@ class CardRecognizer:
                     if best_match['p_dist'] < self.retry_p_threshold: break
                 
                 if best_match['p_dist'] < p_initial:
-                    self._log(f"Slot {i+1:02d}: Optimized via Shift ({p_initial} -> {best_match['p_dist']})")
                     match, art = best_match, best_art
 
             if match['name'] == "Empty Slot": continue
-            self._log(f"Slot {i+1:02d}: {match['name']} P:{match['p_dist']}")
             
             raw_results.append(match)
             color = (0, 255, 0) if match['p_dist'] < 80 else (0, 255, 255) if match['p_dist'] < 95 else (0, 0, 255)
@@ -229,15 +220,15 @@ class CardRecognizer:
             if art is not None:
                 cv2.imwrite(str(debug_path / f"Slot_{i+1:02d}_{self._sanitize_filename(match['name'])}_final_P{match['p_dist']}.jpg"), art)
             
-            if progress_callback: 
-                await progress_callback(i + 1, len(grid), match['name']) 
-                await asyncio.sleep(0)
+            if progress_sync_callback:
+                progress_sync_callback(i + 1, len(grid), match['name'])
 
         final_json = self._format_output(raw_results, user_id)
         cv2.imwrite(str(debug_path / "_full_grid.jpg"), canvas)
-        with open(debug_path / "deck_result.json", "w", encoding="utf-8") as f: json.dump(final_json, f, indent=4, ensure_ascii=False)
-        self.current_session_path = None
-        return final_json, f"{user_id}/session_{timestamp}/_full_grid.jpg"
+        with open(debug_path / "deck_result.json", "w", encoding="utf-8") as f: 
+            json.dump(final_json, f, indent=4, ensure_ascii=False)
+            
+        return final_json, f"{user_id}/session_{session_id}/_full_grid.jpg"
 
     def _format_output(self, results, user_id):
         output = {"user_id": user_id, "summary": {"total_matched": 0, "threshold": self.threshold},

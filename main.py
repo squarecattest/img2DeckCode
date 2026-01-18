@@ -3,11 +3,13 @@ import numpy as np
 import os
 import sys
 import asyncio
+from functools import partial
 from fastapi import FastAPI, WebSocket, Query, UploadFile, File
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
- 
+from datetime import datetime
+
 BASE_DIR = Path(__file__).parent.absolute()      
 WEB_DIR = BASE_DIR / "web"      
 OUTPUT_DIR = BASE_DIR / "output"
@@ -17,33 +19,29 @@ sys.path.append(str(BASE_DIR))
 try:
     from src.recognizer import CardRecognizer
 except ImportError:
-    print(f"錯誤：無法載入 src.recognizer。請確保目錄結構正確。路徑：{BASE_DIR}")
+    print(f"錯誤：無法載入 src.recognizer。路徑：{BASE_DIR}")
     sys.exit(1)
 
 app = FastAPI()
-
-# 確保輸出目錄存在
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-# 掛載靜態檔案
 app.mount("/static", StaticFiles(directory=str(WEB_DIR)), name="static")
 app.mount("/output", StaticFiles(directory=str(OUTPUT_DIR)), name="output")
 
-# 初始化辨識核心
 recognizer = CardRecognizer(confidence_threshold=100)
 
 @app.get("/")
 async def get():
     index_path = WEB_DIR / "index.html"
     if not index_path.exists():
-        return HTMLResponse(content=f"<h1>Error: 找不到 index.html</h1><p>路徑: {index_path}</p>", status_code=404)
+        return HTMLResponse(content="<h1>Error: 找不到 index.html</h1>", status_code=404)
     with open(index_path, "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
 
-# --- 1. 原有的 WebSocket 辨識 (供網頁使用) ---
+# --- 1. WebSocket 辨識 (網頁用，支援即時進度) ---
 @app.websocket("/ws/recognize")
 async def websocket_endpoint(websocket: WebSocket, mode: str = Query("GRID")):
     await websocket.accept()
+    loop = asyncio.get_event_loop()
     try:
         image_bytes = await websocket.receive_bytes()
         nparr = np.frombuffer(image_bytes, np.uint8)
@@ -53,37 +51,38 @@ async def websocket_endpoint(websocket: WebSocket, mode: str = Query("GRID")):
             await websocket.send_json({"type": "error", "message": "影像解碼失敗"})
             return
 
-        async def progress_callback(current, total, card_name="辨識中..."):
-            await websocket.send_json({
-                "type": "progress", 
-                "current": current, 
-                "total": total, 
-                "percent": int(current/total*100),
-                "card_name": card_name
-            })
+        # 進度回報：由於核心在線程池跑，需透過 loop.call_soon_threadsafe 回傳到 async
+        def progress_sync(current, total, card_name):
+            asyncio.run_coroutine_threadsafe(
+                websocket.send_json({
+                    "type": "progress", "current": current, "total": total,
+                    "percent": int(current/total*100), "card_name": card_name
+                }), loop
+            )
 
-        # 呼叫核心辨識邏輯
-        final_output, grid_img_rel_path = await recognizer.process_image_async(
-            image, mode=mode, user_id="web_user", progress_callback=progress_callback
+        session_id = datetime.now().strftime('%Y%m%d_%H%M%S')
+        
+        # 在 Executor 中執行 CPU 密集任務，避免卡住其他連線
+        final_output, grid_img_rel_path = await loop.run_in_executor(
+            None, 
+            partial(recognizer.process_image_sync, image, mode=mode, 
+                    user_id="web_user", session_id=session_id, progress_sync_callback=progress_sync)
         )
 
         await websocket.send_json({
-            "type": "final", 
-            "data": final_output, 
-            "image_url": f"/output/{grid_img_rel_path}"
+            "type": "final", "data": final_output, "image_url": f"/output/{grid_img_rel_path}"
         })
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
         await websocket.send_json({"type": "error", "message": str(e)})
     finally:
         await websocket.close()
 
+# --- 2. HTTP API (Discord Bot 用，多人呼叫不打架) ---
 @app.post("/api/recognize")
 async def api_recognize(mode: str = "GRID", file: UploadFile = File(...)):
+    loop = asyncio.get_event_loop()
     try:
-        # 讀取上傳圖片
         image_bytes = await file.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
         image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -91,8 +90,13 @@ async def api_recognize(mode: str = "GRID", file: UploadFile = File(...)):
         if image is None:
             return JSONResponse(status_code=400, content={"error": "影像解碼失敗"})
 
-        final_output, grid_img_rel_path = await recognizer.process_image_async(
-            image, mode=mode, user_id="dc_bot", progress_callback=None
+        session_id = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+        # 使用 run_in_executor 確保多個 POST 請求可以同時進行
+        final_output, grid_img_rel_path = await loop.run_in_executor(
+            None,
+            partial(recognizer.process_image_sync, image, mode=mode, 
+                    user_id="dc_bot", session_id=session_id)
         )
 
         return {
@@ -102,10 +106,9 @@ async def api_recognize(mode: str = "GRID", file: UploadFile = File(...)):
         }
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 if __name__ == "__main__":
     import uvicorn
+    # 開發環境 reload=True, 正式環境建議關閉
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

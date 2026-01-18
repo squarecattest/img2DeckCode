@@ -69,11 +69,11 @@ h1 { margin: 0; font-size: 26px; padding-top: 10px; } /* 增加頂部間距避�
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    width: 120px;
+    width: 160px;
     z-index: 100;
 }
 .avatar-container {
-    width: 70px; height: 70px;
+    width: 90px; height: 90px;
     border-radius: 50%;
     border: 3px solid var(--primary);
     overflow: hidden;
