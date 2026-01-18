@@ -10,6 +10,8 @@ It also exposes an API that allows external clients, such as Discord bots, to su
 
 ## ✏️ TODO
 
+- [ ] Alternate Art recognition
+
 - [ ] Generate Neuron Deck IDs
 
 - [ ] Enhance Pendulum Monster recognition
