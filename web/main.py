@@ -1,106 +1,76 @@
-import sys
 import cv2
 import numpy as np
-import asyncio
-from pathlib import Path
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import os
+import sys
+from fastapi import FastAPI, WebSocket, Query
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 
-# 1. 處理路徑，確保能匯入 src.recognizer
-# 假設目錄結構：
-# /project_root
-#   /src/recognizer.py
-#   /web/main.py
-#   /web/index.html
-#   /output/
-current_file = Path(__file__).resolve()
-project_root = current_file.parent.parent
-sys.path.append(str(project_root))
+# 1. 自動定位路徑
+WEB_DIR = Path(__file__).parent.absolute()      # web/ 資料夾
+BASE_DIR = WEB_DIR.parent.absolute()            # 專案根目錄
+OUTPUT_DIR = BASE_DIR / "output"
+DATA_DIR = BASE_DIR / "data"
 
-from src.recognizer import CardRecognizer
+# 2. 強制加入根目錄到 Python 路徑，確保能 import src.recognizer
+sys.path.append(str(BASE_DIR))
+try:
+    from src.recognizer import CardRecognizer
+except ImportError:
+    print(f"錯誤：無法載入 src.recognizer。請確保目錄結構正確。路徑：{BASE_DIR}")
+    sys.exit(1)
 
-app = FastAPI(title="Yu-Gi-Oh Card Recognizer")
+app = FastAPI()
 
-# 2. CORS 設定 (解決連線失敗的關鍵)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# 3. 掛載資料夾 (使用絕對路徑)
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/static", StaticFiles(directory=str(WEB_DIR)), name="static")
+app.mount("/output", StaticFiles(directory=str(OUTPUT_DIR)), name="output")
 
-# 3. 掛載靜態檔案 (讓瀏覽器能存取 output 裡的 _full_grid.jpg)
-output_path = project_root / "output"
-output_path.mkdir(exist_ok=True)
-app.mount("/output", StaticFiles(directory=str(output_path)), name="output")
+recognizer = CardRecognizer(confidence_threshold=100)
 
-# 初始化辨識器
-recognizer = CardRecognizer(confidence_threshold=90)
-
-# 4. 首頁路由：直接提供 index.html 畫面
 @app.get("/")
-async def get_index():
-    index_path = Path(__file__).parent / "index.html"
+async def get():
+    index_path = WEB_DIR / "index.html"
     if not index_path.exists():
-        return HTMLResponse(content="<h1>index.html not found in web/ folder</h1>", status_code=404)
+        return HTMLResponse(content=f"<h1>Error: 找不到 index.html</h1><p>路徑: {index_path}</p>", status_code=404)
     with open(index_path, "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
 
-# 5. WebSocket 辨識核心
 @app.websocket("/ws/recognize")
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(websocket: WebSocket, mode: str = Query("GRID")):
     await websocket.accept()
     try:
-        # 接收圖片二進位數據
-        bytes_data = await websocket.receive_bytes()
-        
-        # 將 bytes 轉為 OpenCV 格式
-        nparr = np.frombuffer(bytes_data, np.uint8)
+        image_bytes = await websocket.receive_bytes()
+        nparr = np.frombuffer(image_bytes, np.uint8)
         image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         if image is None:
-            await websocket.send_json({"type": "error", "message": "無法解析圖片"})
+            await websocket.send_json({"type": "error", "message": "影像解碼失敗"})
             return
 
-        # 定義進度回報的回呼函數 (給 Recognizer 使用)
-        async def send_progress(current, total):
+        async def progress_callback(current, total):
             await websocket.send_json({
-                "type": "progress",
-                "current": current,
-                "total": total,
-                "percent": int((current / total) * 100)
+                "type": "progress", "current": current, "total": total, "percent": int(current/total*100)
             })
 
-        # 呼叫非同步辨識邏輯
-        # 這裡會回傳 JSON 結果，以及相對於 output 資料夾的圖片路徑
-        final_json, relative_grid_path = await recognizer.process_image_async(
-            image, 
-            user_id="web_user", 
-            progress_callback=send_progress
+        final_output, grid_img_rel_path = await recognizer.process_image_async(
+            image, mode=mode, user_id="web_user", progress_callback=progress_callback
         )
 
-        # 回傳最終結果給前端
         await websocket.send_json({
-            "type": "final",
-            "data": final_json,
-            "image_url": f"/output/{relative_grid_path}" # 拼接成 URL
+            "type": "final", "data": final_output, "image_url": f"/output/{grid_img_rel_path}"
         })
 
-    except WebSocketDisconnect:
-        print("使用者中斷連線")
     except Exception as e:
-        print(f"發生錯誤: {e}")
+        import traceback
+        traceback.print_exc()
         await websocket.send_json({"type": "error", "message": str(e)})
     finally:
-        try:
-            await websocket.close()
-        except:
-            pass
+        await websocket.close()
 
 if __name__ == "__main__":
     import uvicorn
-    # 也可以直接執行 python web/main.py
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    # 這裡的 'web.main:app' 告訴 uvicorn 去 web 資料夾下的 main.py 找 app
+    uvicorn.run("web.main:app", host="0.0.0.0", port=8000, reload=True)

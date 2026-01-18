@@ -1,0 +1,183 @@
+import cv2
+import numpy as np
+import json
+import imagehash
+import asyncio
+import logging
+import sys
+from PIL import Image
+from pathlib import Path
+from datetime import datetime
+import re
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning)
+
+class CardRecognizer:
+    try:
+        RESAMPLE_METHOD = Image.Resampling.LANCZOS
+    except AttributeError:
+        RESAMPLE_METHOD = Image.LANCZOS
+
+    def __init__(self, confidence_threshold=100):
+        self.threshold = confidence_threshold
+        self.base_dir = Path(__file__).parent.parent.absolute()
+        self.id_db, self.hash_db = self._load_databases()
+        
+        # 模板模式比例
+        self.main_deck_60_ratios = {'ay1': 0.21, 'ay2': 0.71, 'ax1': 0.15, 'ax2': 0.92}
+        self.standard_ratios = {'ay1': 0.19, 'ay2': 0.71, 'ax1': 0.14, 'ax2': 0.86}
+        self.shift_range = [-0.05, -0.03, 0.0, 0.03, 0.05]
+        
+        # 自動推論模式比例
+        self.inference_art_ratios = {'ay1': 0.22, 'ay2': 0.69, 'ax1': 0.18, 'ax2': 0.86}
+
+    def _load_databases(self):
+        data_folder = self.base_dir / 'data'
+        try:
+            with open(data_folder / 'id_to_card_data.json', 'r', encoding='utf-8') as f: id_db = json.load(f)
+            with open(data_folder / 'card_hashes.json', 'r', encoding='utf-8') as f: hash_db = json.load(f)
+            return id_db, hash_db
+        except Exception: return {}, {}
+
+    def _setup_logger(self, session_dir):
+        logger = logging.getLogger("CardRecognizer")
+        logger.setLevel(logging.DEBUG)
+        if logger.hasHandlers(): logger.handlers.clear()
+        file_handler = logging.FileHandler(session_dir / "recognition.log", encoding='utf-8')
+        file_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(message)s'))
+        logger.addHandler(file_handler)
+        return logger
+
+    # --- 核心邏輯 A：模板模式 (SIFT + Homography) ---
+    def _get_template_grid(self, image, mode, logger):
+        img_h, img_w = image.shape[:2]
+        template_path = self.base_dir / 'data' / f"{mode}.png"
+        tmp = cv2.imread(str(template_path))
+        if tmp is None: return []
+        
+        sift = cv2.SIFT_create()
+        kp1, des1 = sift.detectAndCompute(cv2.cvtColor(tmp, cv2.COLOR_BGR2GRAY), None)
+        kp2, des2 = sift.detectAndCompute(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), None)
+        
+        bf = cv2.BFMatcher()
+        matches = bf.knnMatch(des1, des2, k=2)
+        good = [m for m, n in matches if m.distance < 0.7 * n.distance]
+
+        M = None
+        if len(good) > 15:
+            src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+            dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+            M, _ = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+
+        # 獲取模板網格 (邏輯同前)
+        hsv = cv2.cvtColor(tmp, cv2.COLOR_BGR2HSV)
+        mask_t = cv2.inRange(hsv, np.array([100, 150, 80]), np.array([140, 255, 255]))
+        contours, _ = cv2.findContours(mask_t, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        final_grid = []
+        for c in contours:
+            x, y, w, h = cv2.boundingRect(c)
+            if w < 20 or h < 20: continue
+            # 簡化處理：直接轉換座標
+            if M is not None:
+                pts = np.float32([[x, y], [x+w, y+h]]).reshape(-1, 1, 2)
+                dst = cv2.perspectiveTransform(pts, M)
+                final_grid.append({'x': int(dst[0][0][0]), 'y': int(dst[0][0][1]), 'w': int(dst[1][0][0]-dst[0][0][0]), 'h': int(dst[1][0][1]-dst[0][0][1])})
+        
+        final_grid.sort(key=lambda b: (b['y'] // 30, b['x']))
+        return final_grid
+
+    # --- 核心邏輯 B：自動推論模式 (Grid Inference) ---
+    def _get_inference_grid(self, image, logger):
+        img_h, img_w = image.shape[:2]
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        edged = cv2.Canny(cv2.medianBlur(gray, 5), 45, 80)
+        dilated = cv2.dilate(edged, cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)), iterations=1)
+        contours, _ = cv2.findContours(dilated, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        
+        boxes = []
+        for c in contours:
+            area = cv2.contourArea(c)
+            if (img_h * img_w * 0.002) < area < (img_h * img_w * 0.1):
+                x, y, w, h = cv2.boundingRect(c)
+                if 1.3 < (h/w) < 1.6: boxes.append([x, y, w, h])
+        
+        if not boxes: return []
+        u_w, u_h = int(np.median([b[2] for b in boxes])), int(np.median([b[3] for b in boxes]))
+        
+        def group(coords, thr):
+            coords.sort()
+            res = [[coords[0]]]
+            for c in coords[1:]:
+                if c - res[-1][-1] < thr: res[-1].append(c)
+                else: res.append([c])
+            return [int(np.mean(g)) for g in res]
+
+        xs = group([b[0] for b in boxes], u_w // 2)
+        ys = group([b[1] for b in boxes], u_h // 2)
+        
+        grid = []
+        for gy in ys:
+            for gx in xs: grid.append({'x': gx, 'y': gy, 'w': u_w, 'h': u_h})
+        return grid
+
+    def _get_best_match(self, crop, ratios, logger, is_inference=False):
+        rh, rw = crop.shape[:2]
+        best = {"name": "Unknown", "p_dist": 999, "shift": 0, "art": None}
+        
+        # 推論模式不使用 shift，直接裁切
+        shifts = [0.0] if is_inference else self.shift_range
+        
+        for s in shifts:
+            off = int(rw * s)
+            x1, x2 = max(0, int(rw*ratios['ax1'])+off), min(rw, int(rw*ratios['ax2'])+off)
+            art = crop[int(rh*ratios['ay1']):int(rh*ratios['ay2']), x1:x2]
+            if art.size == 0: continue
+            
+            phash = imagehash.phash(Image.fromarray(cv2.cvtColor(art, cv2.COLOR_BGR2RGB)).resize((128,128), self.RESAMPLE_METHOD), 16)
+            for cid, data in self.hash_db.items():
+                d = phash - imagehash.hex_to_hash(data["phash"])
+                if d < best["p_dist"]:
+                    best.update({"name": self.id_db.get(cid, {"name": "Unknown"})["name"], "p_dist": int(d), "shift": s, "art": art.copy()})
+            if best["p_dist"] <= 3: break
+        return best
+
+    async def process_image_async(self, image, mode="AUTO", user_id="web", progress_callback=None):
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        session_dir = self.base_dir / 'output' / user_id / f"session_{timestamp}"
+        session_dir.mkdir(parents=True, exist_ok=True)
+        logger = self._setup_logger(session_dir)
+
+        # 根據 mode 選擇網格演算法
+        if mode in ["40", "60", "60A"]:
+            logger.info(f"模式：模板校準 ({mode}.png)")
+            grid = self._get_template_grid(image, mode, logger)
+            is_inference = False
+        else:
+            logger.info("模式：自動網格推論")
+            grid = self._get_inference_grid(image, logger)
+            is_inference = True
+
+        results, canvas = [], image.copy()
+        for i, box in enumerate(grid):
+            x, y, w, h = box['x'], box['y'], box['w'], box['h']
+            crop = image[max(0, y):y+h, max(0, x):x+w]
+            if crop.size == 0 or np.std(crop) < 14: continue
+            
+            ratios = self.inference_art_ratios if is_inference else (self.main_deck_60_ratios if i < 60 and mode=="60" else self.standard_ratios)
+            res = self._get_best_match(crop, ratios, logger, is_inference)
+            
+            # 儲存單圖
+            safe_name = re.sub(r'\W+', '', res['name'])
+            cv2.imwrite(str(session_dir / f"Slot_{i+1:02d}_{safe_name}_P{res['p_dist']}.jpg"), res['art'] if res['art'] is not None else crop)
+            
+            # 標記
+            cv2.rectangle(canvas, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            cv2.putText(canvas, f"#{i+1} P:{res['p_dist']}", (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
+            
+            results.append({"slot": i+1, "name": res['name'], "p_dist": res['p_dist']})
+            if progress_callback: await progress_callback(i+1, len(grid))
+
+        cv2.imwrite(str(session_dir / "_full_grid.jpg"), canvas)
+        return {"results": results}, f"{user_id}/session_{timestamp}/_full_grid.jpg"
