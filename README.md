@@ -10,13 +10,13 @@ It also exposes an API that allows external clients, such as Discord bots, to su
 
 ## ✏️ TODO
 
-- [ ] Alternate Art recognition
-
 - [ ] Generate Neuron Deck IDs
 
 - [ ] Enhance Pendulum Monster recognition
 
 - [ ] Optimize recognition for 60-card decks
+
+- [x] Alternate Art recognition
 
 - [x] Implement language selection for the webpage
 
@@ -36,7 +36,7 @@ cd img2DeckCode
 
 ### 3️⃣ Install Python 🐍
 
-Ensure Python 3.10 or above is installed. If not, download it:  
+Ensure Python 3.10 is installed. If not, download it:  
 👉 [Download Python](https://www.python.org/downloads/)
 
 ## 📦 Install Dependencies
@@ -52,12 +52,12 @@ python -m pip install -r requirements.txt
 ## ▶️ How to Run
 
 ```bash
-python ./web/main.py
+python ./main.py
 ```
 
 ```bash
 cd web
-ngrok http 8000
+./ngrok.exe http 8000
 ```
 
 Use the generated ngrok URL to access the web interface or call the API remotely.

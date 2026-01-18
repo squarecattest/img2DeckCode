@@ -27,7 +27,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(WEB_DIR)), name="static")
 app.mount("/output", StaticFiles(directory=str(OUTPUT_DIR)), name="output")
 
-recognizer = CardRecognizer(confidence_threshold=100)
+recognizer = CardRecognizer(confidence_threshold=90)
 
 @app.get("/")
 async def get():
@@ -78,7 +78,7 @@ async def websocket_endpoint(websocket: WebSocket, mode: str = Query("GRID")):
     finally:
         await websocket.close()
 
-# --- 2. HTTP API (Discord Bot 用，多人呼叫不打架) ---
+# --- 2. HTTP API (Discord Bot 用) ---
 @app.post("/api/recognize")
 async def api_recognize(mode: str = "GRID", file: UploadFile = File(...)):
     loop = asyncio.get_event_loop()
@@ -110,5 +110,4 @@ async def api_recognize(mode: str = "GRID", file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     import uvicorn
-    # 開發環境 reload=True, 正式環境建議關閉
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

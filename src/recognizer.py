@@ -50,13 +50,8 @@ class CardRecognizer:
         if session_path: cv2.imwrite(str(session_path / "debug_1_gray.jpg"), gray)
         
         blurred = cv2.medianBlur(gray, 5)
-        if session_path: cv2.imwrite(str(session_path / "debug_2_blurred.jpg"), blurred)
-        
-        edged = cv2.Canny(blurred, 40, 80)
-        if session_path: cv2.imwrite(str(session_path / "debug_3_edged.jpg"), edged)
-        
+        edged = cv2.Canny(blurred, 40, 80) # 稍微調低門檻以抓取更多邊緣
         dilated = cv2.dilate(edged, cv2.getStructuringElement(cv2.MORPH_RECT, (1, 3)), iterations=1)
-        if session_path: cv2.imwrite(str(session_path / "debug_4_dilated.jpg"), dilated)
 
         contours, _ = cv2.findContours(dilated, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         raw_boxes = []
@@ -64,9 +59,9 @@ class CardRecognizer:
         
         for c in contours:
             area = cv2.contourArea(c)
-            if (img_h * img_w * 0.002) < area < (img_h * img_w * 0.1):
+            if (img_h * img_w * 0.002) < area < (img_h * img_w * 0.1): # 放寬面積限制
                 x, y, w, h = cv2.boundingRect(c)
-                if 1.3 < (h/w) < 1.6:
+                if 1.2 < (h/w) < 1.6: # 放寬比例限制，避免邊緣卡片被剔除
                     raw_boxes.append({'x': x, 'y': y, 'w': w, 'h': h})
                     cv2.rectangle(candidates_img, (x, y), (x + w, y + h), (0, 255, 0), 1)
 
@@ -76,14 +71,11 @@ class CardRecognizer:
         rows_data = []
         current_row = [raw_boxes[0]]
         for i in range(1, len(raw_boxes)):
-            if abs(raw_boxes[i]['y'] - current_row[-1]['y']) < (current_row[-1]['h'] * 0.4):
+            if abs(raw_boxes[i]['y'] - current_row[-1]['y']) < (current_row[-1]['h'] * 0.5):
                 current_row.append(raw_boxes[i])
             else:
                 rows_data.append(current_row); current_row = [raw_boxes[i]]
         rows_data.append(current_row)
-
-        main_deck_rows = rows_data[:5]
-        extra_deck_rows = rows_data[5:]
 
         def get_global_ref(rows):
             all_b = [b for r in rows for b in r]
@@ -92,15 +84,14 @@ class CardRecognizer:
             ref_h = int(np.median([b['h'] for b in all_b]))
             gaps = []
             for r in rows:
-                xs = sorted(list(set([b['x'] for b in r])))
-                if len(xs) >= 2:
-                    for i in range(len(xs)-1):
-                        g = xs[i+1] - xs[i]
-                        if ref_w * 0.8 < g < ref_w * 1.5: gaps.append(g)
+                r_sorted = sorted(r, key=lambda b: b['x'])
+                for i in range(len(r_sorted)-1):
+                    g = r_sorted[i+1]['x'] - r_sorted[i]['x']
+                    if ref_w * 0.9 < g < ref_w * 1.6: gaps.append(g)
             ref_gap = int(np.median(gaps)) if gaps else int(ref_w * 1.05)
             return ref_w, ref_h, ref_gap
 
-        m_ref = get_global_ref(main_deck_rows) or get_global_ref(rows_data)
+        m_ref = get_global_ref(rows_data[:5]) or get_global_ref(rows_data)
         m_w, m_h, m_gap = m_ref
 
         final_grid = []
@@ -109,50 +100,60 @@ class CardRecognizer:
         def process_and_fill_full(rows_to_process, ref_w, ref_h, ref_gap, label_prefix, color_start_idx):
             for r_idx, row in enumerate(rows_to_process):
                 row_y = int(np.mean([b['y'] for b in row]))
-                valid_anchors = [b for b in row if abs(b['w'] - ref_w) < ref_w * 0.15 and abs(b['h'] - ref_h) < ref_h * 0.15]
-                anchor_xs = {b['x']: b for b in valid_anchors}
+                # 找出這一排所有可能的錨點（較寬鬆）
+                anchor_xs = {b['x']: b for b in row}
                 det_xs = sorted(list(anchor_xs.keys()))
                 if not det_xs: continue 
 
-                left_anchor = min(det_xs)
-                while left_anchor - ref_gap > (img_w * 0.03): left_anchor -= ref_gap
+                # 往左推算到盡頭
+                left_most = min(det_xs)
+                while left_most - ref_gap > (img_w * 0.02):
+                    left_most -= ref_gap
                 
-                curr_x = left_anchor
+                # 從最左邊開始往右掃描整張圖
+                curr_x = left_most
                 potential_xs = []
-                while curr_x + ref_w < (img_w * 0.98):
-                    potential_xs.append(curr_x); curr_x += ref_gap
+                while curr_x + (ref_w * 0.5) < img_w: # 只要中心點還在圖內就繼續
+                    potential_xs.append(curr_x)
+                    curr_x += ref_gap
 
                 color = row_colors[(color_start_idx + r_idx) % len(row_colors)]
                 for fx in potential_xs:
+                    # 匹配現有的偵測框
                     matched_anchor = None
                     for ax in det_xs:
-                        if abs(fx - ax) < (ref_w * 0.4):
+                        if abs(fx - ax) < (ref_w * 0.5): # 增加匹配容許度
                             matched_anchor = anchor_xs[ax]
                             break
                     
-                    if matched_anchor:
-                        target_box = matched_anchor
-                        is_inferred = False
-                    else:
-                        target_box = {'x': fx, 'y': row_y, 'w': ref_w, 'h': ref_h}
-                        is_inferred = True
+                    target_box = matched_anchor if matched_anchor else {'x': fx, 'y': row_y, 'w': ref_w, 'h': ref_h}
+                    is_inferred = matched_anchor is None
                     
+                    # 邊界檢查：確保不超出圖片太誇張
+                    tx, ty, tw, th = target_box['x'], target_box['y'], target_box['w'], target_box['h']
+                    if tx < 0 or tx > img_w - tw*0.3: continue
+
                     final_grid.append(target_box)
+                    
+                    # Debug 繪製
                     thickness = 1 if is_inferred else 2
-                    cv2.rectangle(candidates_img, (target_box['x'], target_box['y']), 
-                                  (target_box['x'] + target_box['w'], target_box['y'] + target_box['h']), color, thickness)
+                    cv2.rectangle(candidates_img, (int(tx), int(ty)), (int(tx+tw), int(ty+th)), color, thickness)
                     if is_inferred:
-                        cv2.circle(candidates_img, (target_box['x'] + ref_w//2, target_box['y'] + ref_h//2), 5, color, -1)
-                    cv2.putText(candidates_img, f"{label_prefix}{r_idx}", (target_box['x'], target_box['y']-5), 
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.4, color, 1)
+                        cv2.circle(candidates_img, (int(tx+tw//2), int(ty+th//2)), 4, color, -1)
+
+        # 區分主牌組與額外牌組
+        main_deck_rows = rows_data[:5]
+        extra_deck_rows = rows_data[5:]
 
         process_and_fill_full(main_deck_rows, m_w, m_h, m_gap, "M", 0)
+        
         if extra_deck_rows:
             e_ref = get_global_ref(extra_deck_rows)
-            if e_ref: process_and_fill_full(extra_deck_rows, e_ref[0], e_ref[1], e_ref[2], "E", len(main_deck_rows))
+            if e_ref:
+                process_and_fill_full(extra_deck_rows, e_ref[0], e_ref[1], e_ref[2], "E", len(main_deck_rows))
 
         if session_path:
-            cv2.imwrite(str(session_path / "debug_5_candidates.jpg"), candidates_img)
+            cv2.imwrite(str(session_path / "debug_5_grid_final.jpg"), candidates_img)
         
         return final_grid
 
@@ -165,7 +166,7 @@ class CardRecognizer:
         
         if art_roi.size == 0: return {"name": "Unknown", "type": "Unknown", "p_dist": 999}, None
         gray = cv2.cvtColor(art_roi, cv2.COLOR_BGR2GRAY)
-        if np.std(gray) < 15: return {"name": "Empty Slot", "type": "None", "p_dist": 999}, None
+        if np.std(gray) < 12: return {"name": "Empty Slot", "type": "None", "p_dist": 999}, None
         
         pil_img = Image.fromarray(cv2.cvtColor(art_roi, cv2.COLOR_BGR2RGB)).resize((128, 128), self.RESAMPLE_METHOD)
         curr_hash = imagehash.phash(pil_img, hash_size=16)
@@ -179,7 +180,6 @@ class CardRecognizer:
                 best_cand = {"id": cid, "name": info["name"], "type": info["type"], "p_dist": int(dist)}
         return best_cand, art_roi
 
-    # 核心辨識函式改為同步，由 main.py 使用 executor 呼叫
     def process_image_sync(self, image, mode="GRID", user_id="web_user", session_id=None, progress_sync_callback=None):
         img_h, img_w = image.shape[:2]
         session_id = session_id or datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -207,18 +207,19 @@ class CardRecognizer:
                         if m_s['p_dist'] < best_match['p_dist']:
                             best_match, best_art = m_s, a_s
                     if best_match['p_dist'] < self.retry_p_threshold: break
-                
-                if best_match['p_dist'] < p_initial:
-                    match, art = best_match, best_art
+                match, art = best_match, best_art
 
             if match['name'] == "Empty Slot": continue
             
             raw_results.append(match)
+            # 繪製辨識框
             color = (0, 255, 0) if match['p_dist'] < 80 else (0, 255, 255) if match['p_dist'] < 95 else (0, 0, 255)
             cv2.rectangle(canvas, (rx, ry), (rx+rw, ry+rh), color, 3)
+            cv2.putText(canvas, f"P:{match['p_dist']}", (rx, ry+rh+15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, color, 1)
             
             if art is not None:
-                cv2.imwrite(str(debug_path / f"Slot_{i+1:02d}_{self._sanitize_filename(match['name'])}_final_P{match['p_dist']}.jpg"), art)
+                safe_name = self._sanitize_filename(match['name'])
+                cv2.imwrite(str(debug_path / f"Slot_{i+1:02d}_{safe_name}_P{match['p_dist']}.jpg"), art)
             
             if progress_sync_callback:
                 progress_sync_callback(i + 1, len(grid), match['name'])
