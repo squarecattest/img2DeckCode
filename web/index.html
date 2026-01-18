@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>遊戲王卡表辨識系統</title>
+    <title> Yu-Gi-Oh! Master Duel Deck Recognizer</title>
     <style>
         :root {
-            --primary: #0071e3;
-            --success: #34c759;
-            --danger: #ff3b30;
-            --bg: #f5f5f7;
+            --primary: #7d5fff; 
+            --success: #32ff7e;
+            --danger: #ff4d4d;
+            --bg: #1e1e26;
             --card: #ffffff;
             --text: #1d1d1f;
             --border: #d2d2d7;
+            --sidebar-bg: #ffffff;
         }
 
         body {
@@ -23,6 +24,7 @@
             padding: 20px;
             display: flex;
             justify-content: center;
+            padding-bottom: 100px;
         }
 
         .container {
@@ -31,7 +33,8 @@
             background: var(--card);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            box-sizing: border-box; /* 確保 padding 不會撐開寬度 */
         }
 
         header {
@@ -42,7 +45,43 @@
         h1 { margin: 0; font-size: 26px; letter-spacing: -0.5px; }
         .desc { color: #86868b; font-size: 14px; margin-top: 5px; }
 
-        /* 選單與上傳區 */
+        /* 右側浮動框 (電腦版) */
+        .floating-info {
+            position: fixed;
+            right: 25px;
+            top: 25%;
+            transform: translateY(-50%);
+            background: var(--sidebar-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 120px;
+            text-align: center;
+        }
+
+        .avatar-container {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            overflow: hidden;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .avatar { width: 100%; height: 100%; object-fit: cover; }
+        .floating-info span { font-size: 14px; font-weight: 700; color: #333; }
+        .floating-info a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+
+        /* 配置區 */
         .config-section {
             background: #fafafa;
             padding: 20px;
@@ -61,7 +100,8 @@
         label { font-weight: 600; min-width: 80px; }
 
         select {
-            flex-grow: 1;
+            flex: 1;
+            min-width: 0; /* 防止 select 撐破 flex 容器 */
             padding: 10px;
             border-radius: 8px;
             border: 1px solid var(--border);
@@ -76,13 +116,8 @@
             padding: 40px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s ease;
             background: white;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: #fbfbff;
+            word-break: break-all;
         }
 
         #previewImg {
@@ -91,7 +126,6 @@
             border-radius: 8px;
             display: none;
             margin: 15px auto;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         button {
@@ -104,91 +138,76 @@
             font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s;
-            margin-top: 10px;
         }
 
-        button:disabled {
-            background: #d2d2d7;
-            cursor: not-allowed;
-        }
+        button:disabled { background: #d2d2d7; }
 
-        /* 進度條 */
-        .progress-box {
-            display: none;
-            margin: 25px 0;
-        }
+        .progress-box { display: none; margin: 25px 0; }
+        .progress-container { width: 100%; height: 10px; background: #e5e5e5; border-radius: 5px; overflow: hidden; }
+        .progress-bar { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s ease; }
+        .progress-info { display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; color: #6e6e73; }
 
-        .progress-container {
-            width: 100%;
-            height: 10px;
-            background: #e5e5e5;
-            border-radius: 5px;
-            overflow: hidden;
-        }
+        .results-section { margin-top: 30px; display: grid; grid-template-columns: 1fr; gap: 25px; }
+        .result-card { display: none; }
+        h3 { font-size: 18px; margin-bottom: 12px; padding-left: 10px; border-left: 4px solid var(--primary); }
+        #fullGridImg { width: 100%; border-radius: 12px; border: 1px solid var(--border); }
+        pre { background: #1d1d1f; color: #f5f5f7; padding: 20px; border-radius: 12px; font-size: 13px; overflow-x: auto; }
 
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: var(--primary);
-            transition: width 0.3s ease;
-        }
+        /* 手機版適應 */
+        @media (max-width: 1150px) {
+            body { padding: 10px; padding-bottom: 80px; }
+            .container { padding: 20px; }
 
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #6e6e73;
-        }
+            /* 修正選單超出範圍：改為垂直排列 */
+            .control-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            select {
+                width: 100%;
+                box-sizing: border-box;
+            }
 
-        /* 結果顯示 */
-        .results-section {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
-
-        .result-card {
-            display: none;
-        }
-
-        h3 {
-            font-size: 18px;
-            margin-bottom: 12px;
-            padding-left: 10px;
-            border-left: 4px solid var(--primary);
-        }
-
-        #fullGridImg {
-            width: 100%;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        pre {
-            background: #1d1d1f;
-            color: #f5f5f7;
-            padding: 20px;
-            border-radius: 12px;
-            font-size: 13px;
-            line-height: 1.5;
-            overflow-x: auto;
-            max-height: 500px;
-        }
-
-        .status-msg {
-            font-weight: 500;
+            /* 底部浮動窗 */
+            .floating-info {
+                position: fixed;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                transform: none;
+                width: 100%;
+                flex-direction: row;
+                justify-content: center;
+                gap: 15px;
+                padding: 10px;
+                border-radius: 0;
+                background: rgba(255, 255, 255, 0.98);
+                border-top: 1px solid var(--border);
+            }
+            .floating-info span, .floating-info a { color: var(--text); font-size: 12px; }
+            .avatar-container { width: 35px; height: 35px; border-width: 2px; }
         }
     </style>
 </head>
 <body>
 
+<div class="floating-info">
+    <div class="avatar-container">
+        <img src="static/img/U_dmcc_friend.png" alt="Avatar" class="avatar" onerror="this.src='https://via.placeholder.com/70';">
+    </div>
+    <span>catagain</span>
+    <a href="https://github.com/catagain/img2DeckCode" target="_blank">
+        <svg height="16" width="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+        GitHub
+    </a>
+</div>
+
 <div class="container">
     <header>
         <h1>Deck Recognizer</h1>
-        <p class="desc">支援自動網格推論與標準模板校準系統</p>
+        <p class="desc">Upload an image to retrieve structured deck data and a Neuron deck code.</p>
     </header>
 
     <div class="config-section">
@@ -196,7 +215,7 @@
             <label>辨識模式</label>
             <select id="modeSelect">
                 <option value="GRID">自動網格推論 (適合各種尺寸/解析度)</option>
-                <option value="TEMPLATE_60">60卡模板模式 (使用 60.png 強制校準)</option>
+                <option value="TEMPLATE_60">WIP: 60卡模式 (使用 60 卡模板強制校準)</option>
             </select>
         </div>
 
@@ -233,6 +252,7 @@
 </div>
 
 <script>
+    // 腳本邏輯保持不變
     const fileInput = document.getElementById('fileInput');
     const processBtn = document.getElementById('processBtn');
     const previewImg = document.getElementById('previewImg');
@@ -250,7 +270,6 @@
 
     let selectedFile = null;
 
-    // 處理檔案選擇
     fileInput.onchange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -261,8 +280,6 @@
                 previewImg.style.display = 'block';
                 uploadText.style.display = 'none';
                 processBtn.disabled = false;
-                
-                // 隱藏舊結果
                 imageResultCard.style.display = 'none';
                 jsonResultCard.style.display = 'none';
                 progressBox.style.display = 'none';
@@ -271,21 +288,16 @@
         }
     };
 
-    // 點擊辨識
     processBtn.onclick = () => {
         if (!selectedFile) return;
-
         const mode = modeSelect.value;
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        // 將模式透過 Query String 帶入給後端
         const socket = new WebSocket(`${protocol}//${window.location.host}/ws/recognize?mode=${mode}`);
 
-        // 初始化 UI 狀態
         processBtn.disabled = true;
         progressBox.style.display = 'block';
         progressBar.style.width = '0%';
         statusLabel.innerText = "連線中...";
-        statusLabel.style.color = "var(--text)";
 
         socket.onopen = () => {
             statusLabel.innerText = "正在傳輸影像...";
@@ -294,45 +306,32 @@
 
         socket.onmessage = (event) => {
             const msg = JSON.parse(event.data);
-
             if (msg.type === "progress") {
                 progressBar.style.width = msg.percent + '%';
                 countLabel.innerText = `${msg.current} / ${msg.total}`;
                 statusLabel.innerText = `辨識進度：第 ${msg.current} 格`;
-            } 
-            else if (msg.type === "final") {
+            } else if (msg.type === "final") {
                 statusLabel.innerText = "辨識完成！";
                 statusLabel.style.color = "var(--success)";
                 progressBar.style.width = '100%';
-                
-                // 顯示 JSON (Monster/Spell/Trap 分類格式)
                 jsonOutput.innerText = JSON.stringify(msg.data, null, 4);
                 jsonResultCard.style.display = 'block';
-
-                // 顯示結果圖 (加 timestamp 避免快取)
                 if (msg.image_url) {
                     fullGridImg.src = msg.image_url + "?t=" + new Date().getTime();
                     imageResultCard.style.display = 'block';
                 }
                 processBtn.disabled = false;
-            } 
-            else if (msg.type === "error") {
+            } else if (msg.type === "error") {
                 statusLabel.innerText = "辨識失敗：" + msg.message;
                 statusLabel.style.color = "var(--danger)";
                 processBtn.disabled = false;
             }
         };
 
-        socket.onerror = (err) => {
-            statusLabel.innerText = "WebSocket 連線發生錯誤";
+        socket.onerror = () => {
+            statusLabel.innerText = "WebSocket 連線錯誤";
             statusLabel.style.color = "var(--danger)";
             processBtn.disabled = false;
-        };
-
-        socket.onclose = () => {
-            if (statusLabel.innerText === "連線中...") {
-                statusLabel.innerText = "伺服器未響應";
-            }
         };
     };
 </script>
