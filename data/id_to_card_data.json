@@ -487,6 +487,10 @@
         "name": "Acid Trap Hole",
         "type": "Trap Card"
     },
+    "41356846": {
+        "name": "Acid Trap Hole",
+        "type": "Trap Card"
+    },
     "35956022": {
         "name": "Acidic Downpour",
         "type": "Spell Card"
@@ -812,6 +816,10 @@
         "type": "Effect Monster"
     },
     "86120751": {
+        "name": "Aleister the Invoker",
+        "type": "Effect Monster"
+    },
+    "86120752": {
         "name": "Aleister the Invoker",
         "type": "Effect Monster"
     },
@@ -2075,6 +2083,10 @@
         "name": "Apollousa, Bow of the Goddess",
         "type": "Link Monster"
     },
+    "4280259": {
+        "name": "Apollousa, Bow of the Goddess",
+        "type": "Link Monster"
+    },
     "95561146": {
         "name": "Apophis the Serpent",
         "type": "Trap Card"
@@ -2340,6 +2352,10 @@
         "type": "Effect Monster"
     },
     "6150044": {
+        "name": "Arcana Knight Joker",
+        "type": "Fusion Monster"
+    },
+    "6150045": {
         "name": "Arcana Knight Joker",
         "type": "Fusion Monster"
     },
@@ -3095,6 +3111,10 @@
         "name": "Ash Blossom & Joyous Spring",
         "type": "Tuner Monster"
     },
+    "14558128": {
+        "name": "Ash Blossom & Joyous Spring",
+        "type": "Tuner Monster"
+    },
     "66848311": {
         "name": "Ashened for Eternity",
         "type": "Trap Card"
@@ -3812,6 +3832,10 @@
         "type": "Trap Card"
     },
     "81480461": {
+        "name": "Barrel Dragon",
+        "type": "Effect Monster"
+    },
+    "81480460": {
         "name": "Barrel Dragon",
         "type": "Effect Monster"
     },
@@ -4823,6 +4847,10 @@
         "name": "Black Rose Dragon",
         "type": "Synchro Monster"
     },
+    "73580472": {
+        "name": "Black Rose Dragon",
+        "type": "Synchro Monster"
+    },
     "69053263": {
         "name": "Black Rose Garden",
         "type": "Spell Card"
@@ -5479,11 +5507,47 @@
         "name": "Blue-Eyes Ultimate Dragon",
         "type": "Fusion Monster"
     },
+    "23995347": {
+        "name": "Blue-Eyes Ultimate Dragon",
+        "type": "Fusion Monster"
+    },
+    "23995348": {
+        "name": "Blue-Eyes Ultimate Dragon",
+        "type": "Fusion Monster"
+    },
     "89604813": {
         "name": "Blue-Eyes Ultimate Spirit Dragon",
         "type": "Synchro Monster"
     },
     "89631139": {
+        "name": "Blue-Eyes White Dragon",
+        "type": "Normal Monster"
+    },
+    "89631140": {
+        "name": "Blue-Eyes White Dragon",
+        "type": "Normal Monster"
+    },
+    "89631141": {
+        "name": "Blue-Eyes White Dragon",
+        "type": "Normal Monster"
+    },
+    "89631142": {
+        "name": "Blue-Eyes White Dragon",
+        "type": "Normal Monster"
+    },
+    "89631143": {
+        "name": "Blue-Eyes White Dragon",
+        "type": "Normal Monster"
+    },
+    "89631144": {
+        "name": "Blue-Eyes White Dragon",
+        "type": "Normal Monster"
+    },
+    "89631145": {
+        "name": "Blue-Eyes White Dragon",
+        "type": "Normal Monster"
+    },
+    "89631146": {
         "name": "Blue-Eyes White Dragon",
         "type": "Normal Monster"
     },
@@ -5695,6 +5759,10 @@
         "name": "Borreload Dragon",
         "type": "Link Monster"
     },
+    "31833039": {
+        "name": "Borreload Dragon",
+        "type": "Link Monster"
+    },
     "6247535": {
         "name": "Borreload eXcharge Dragon",
         "type": "XYZ Monster"
@@ -5720,6 +5788,10 @@
         "type": "Link Monster"
     },
     "85289965": {
+        "name": "Borrelsword Dragon",
+        "type": "Link Monster"
+    },
+    "85289966": {
         "name": "Borrelsword Dragon",
         "type": "Link Monster"
     },
@@ -6483,6 +6555,10 @@
         "name": "Buster Blader",
         "type": "Effect Monster"
     },
+    "78193832": {
+        "name": "Buster Blader",
+        "type": "Effect Monster"
+    },
     "3428069": {
         "name": "Buster Blader, the Destruction Swordmaster",
         "type": "Effect Monster"
@@ -6983,6 +7059,14 @@
         "name": "Celtic Guardian",
         "type": "Normal Monster"
     },
+    "91152257": {
+        "name": "Celtic Guardian",
+        "type": "Normal Monster"
+    },
+    "91152258": {
+        "name": "Celtic Guardian",
+        "type": "Normal Monster"
+    },
     "51394546": {
         "name": "Cemetary Bomb",
         "type": "Trap Card"
@@ -7244,6 +7328,10 @@
         "type": "Spell Card"
     },
     "55878038": {
+        "name": "Chaos Dragon Levianeer",
+        "type": "Effect Monster"
+    },
+    "55878039": {
         "name": "Chaos Dragon Levianeer",
         "type": "Effect Monster"
     },
@@ -7840,6 +7928,10 @@
         "type": "Synchro Pendulum Effect Monster"
     },
     "82044280": {
+        "name": "Clear Wing Synchro Dragon",
+        "type": "Synchro Monster"
+    },
+    "82044279": {
         "name": "Clear Wing Synchro Dragon",
         "type": "Synchro Monster"
     },
@@ -8963,6 +9055,10 @@
         "name": "Crush Card Virus",
         "type": "Trap Card"
     },
+    "57728571": {
+        "name": "Crush Card Virus",
+        "type": "Trap Card"
+    },
     "88667504": {
         "name": "Crusher Run",
         "type": "Trap Card"
@@ -9491,6 +9587,10 @@
         "name": "Cyber Dragon",
         "type": "Effect Monster"
     },
+    "70095155": {
+        "name": "Cyber Dragon",
+        "type": "Effect Monster"
+    },
     "23893227": {
         "name": "Cyber Dragon Core",
         "type": "Effect Monster"
@@ -9504,6 +9604,10 @@
         "type": "Effect Monster"
     },
     "10443957": {
+        "name": "Cyber Dragon Infinity",
+        "type": "XYZ Monster"
+    },
+    "10443958": {
         "name": "Cyber Dragon Infinity",
         "type": "XYZ Monster"
     },
@@ -9540,6 +9644,10 @@
         "type": "Spell Card"
     },
     "1546123": {
+        "name": "Cyber End Dragon",
+        "type": "Fusion Monster"
+    },
+    "1546124": {
         "name": "Cyber End Dragon",
         "type": "Fusion Monster"
     },
@@ -10963,11 +11071,67 @@
         "name": "Dark Magician",
         "type": "Normal Monster"
     },
+    "46986415": {
+        "name": "Dark Magician",
+        "type": "Normal Monster"
+    },
+    "46986416": {
+        "name": "Dark Magician",
+        "type": "Normal Monster"
+    },
+    "46986417": {
+        "name": "Dark Magician",
+        "type": "Normal Monster"
+    },
+    "46986418": {
+        "name": "Dark Magician",
+        "type": "Normal Monster"
+    },
+    "46986419": {
+        "name": "Dark Magician",
+        "type": "Normal Monster"
+    },
+    "36996508": {
+        "name": "Dark Magician",
+        "type": "Normal Monster"
+    },
+    "46986420": {
+        "name": "Dark Magician",
+        "type": "Normal Monster"
+    },
+    "46986421": {
+        "name": "Dark Magician",
+        "type": "Normal Monster"
+    },
     "38033121": {
         "name": "Dark Magician Girl",
         "type": "Effect Monster"
     },
+    "38033122": {
+        "name": "Dark Magician Girl",
+        "type": "Effect Monster"
+    },
+    "38033123": {
+        "name": "Dark Magician Girl",
+        "type": "Effect Monster"
+    },
+    "38033124": {
+        "name": "Dark Magician Girl",
+        "type": "Effect Monster"
+    },
+    "38033125": {
+        "name": "Dark Magician Girl",
+        "type": "Effect Monster"
+    },
+    "38033126": {
+        "name": "Dark Magician Girl",
+        "type": "Effect Monster"
+    },
     "43892408": {
+        "name": "Dark Magician Girl the Dragon Knight",
+        "type": "Fusion Monster"
+    },
+    "43892409": {
         "name": "Dark Magician Girl the Dragon Knight",
         "type": "Fusion Monster"
     },
@@ -11035,6 +11199,14 @@
         "name": "Dark Paladin",
         "type": "Fusion Monster"
     },
+    "98502114": {
+        "name": "Dark Paladin",
+        "type": "Fusion Monster"
+    },
+    "98502115": {
+        "name": "Dark Paladin",
+        "type": "Fusion Monster"
+    },
     "13193642": {
         "name": "Dark Plant",
         "type": "Normal Monster"
@@ -11048,6 +11220,10 @@
         "type": "Normal Monster"
     },
     "16195942": {
+        "name": "Dark Rebellion Xyz Dragon",
+        "type": "XYZ Monster"
+    },
+    "16195943": {
         "name": "Dark Rebellion Xyz Dragon",
         "type": "XYZ Monster"
     },
@@ -11544,6 +11720,10 @@
         "type": "Spell Card"
     },
     "1861629": {
+        "name": "Decode Talker",
+        "type": "Link Monster"
+    },
+    "1861630": {
         "name": "Decode Talker",
         "type": "Link Monster"
     },
@@ -12079,6 +12259,10 @@
         "name": "Destiny HERO - Plasma",
         "type": "Effect Monster"
     },
+    "83965311": {
+        "name": "Destiny HERO - Plasma",
+        "type": "Effect Monster"
+    },
     "15294090": {
         "name": "Destiny Mirage",
         "type": "Trap Card"
@@ -12276,6 +12460,10 @@
         "type": "Spell Card"
     },
     "84257640": {
+        "name": "Dian Keto the Cure Master",
+        "type": "Spell Card"
+    },
+    "84257639": {
         "name": "Dian Keto the Cure Master",
         "type": "Spell Card"
     },
@@ -13279,6 +13467,10 @@
         "name": "Doomsday Token",
         "type": "Token"
     },
+    "46173681": {
+        "name": "Doomsday Token",
+        "type": "Token"
+    },
     "58369990": {
         "name": "Doomstar Magician",
         "type": "Effect Monster"
@@ -14143,6 +14335,10 @@
         "name": "Dramatic Rescue",
         "type": "Trap Card"
     },
+    "80193356": {
+        "name": "Dramatic Rescue",
+        "type": "Trap Card"
+    },
     "26700718": {
         "name": "Dramatic Snake-Eye Chase",
         "type": "Spell Card"
@@ -14300,6 +14496,10 @@
         "type": "Trap Card"
     },
     "94145021": {
+        "name": "Droll & Lock Bird",
+        "type": "Effect Monster"
+    },
+    "94145022": {
         "name": "Droll & Lock Bird",
         "type": "Effect Monster"
     },
@@ -14955,6 +15155,10 @@
         "name": "El Shaddoll Construct",
         "type": "Fusion Monster"
     },
+    "20366275": {
+        "name": "El Shaddoll Construct",
+        "type": "Fusion Monster"
+    },
     "6417578": {
         "name": "El Shaddoll Fusion",
         "type": "Spell Card"
@@ -14979,6 +15183,10 @@
         "name": "El Shaddoll Winda",
         "type": "Fusion Monster"
     },
+    "94977270": {
+        "name": "El Shaddoll Winda",
+        "type": "Fusion Monster"
+    },
     "92223430": {
         "name": "Elborz, the Sacred Lands of Simorgh",
         "type": "Spell Card"
@@ -15000,6 +15208,10 @@
         "type": "Effect Monster"
     },
     "95440946": {
+        "name": "Eldlich the Golden Lord",
+        "type": "Effect Monster"
+    },
+    "95440947": {
         "name": "Eldlich the Golden Lord",
         "type": "Effect Monster"
     },
@@ -15127,6 +15339,10 @@
         "name": "Elemental HERO Avian",
         "type": "Normal Monster"
     },
+    "21844577": {
+        "name": "Elemental HERO Avian",
+        "type": "Normal Monster"
+    },
     "59793705": {
         "name": "Elemental HERO Bladedge",
         "type": "Effect Monster"
@@ -15144,6 +15360,10 @@
         "type": "Effect Monster"
     },
     "58932615": {
+        "name": "Elemental HERO Burstinatrix",
+        "type": "Normal Monster"
+    },
+    "58932616": {
         "name": "Elemental HERO Burstinatrix",
         "type": "Normal Monster"
     },
@@ -15287,6 +15507,10 @@
         "name": "Elemental HERO Neos",
         "type": "Normal Monster"
     },
+    "89943724": {
+        "name": "Elemental HERO Neos",
+        "type": "Normal Monster"
+    },
     "69884162": {
         "name": "Elemental HERO Neos Alius",
         "type": "Gemini Monster"
@@ -15351,6 +15575,10 @@
         "name": "Elemental HERO Sparkman",
         "type": "Normal Monster"
     },
+    "20721929": {
+        "name": "Elemental HERO Sparkman",
+        "type": "Normal Monster"
+    },
     "13256226": {
         "name": "Elemental HERO Spirit of Neos",
         "type": "Effect Monster"
@@ -15364,6 +15592,10 @@
         "type": "Fusion Monster"
     },
     "40044918": {
+        "name": "Elemental HERO Stratos",
+        "type": "Effect Monster"
+    },
+    "40044919": {
         "name": "Elemental HERO Stratos",
         "type": "Effect Monster"
     },
@@ -17055,6 +17287,10 @@
         "name": "Familiar-Possessed - Aussa",
         "type": "Effect Monster"
     },
+    "31887906": {
+        "name": "Familiar-Possessed - Aussa",
+        "type": "Effect Monster"
+    },
     "21390858": {
         "name": "Familiar-Possessed - Dharc",
         "type": "Effect Monster"
@@ -17063,7 +17299,15 @@
         "name": "Familiar-Possessed - Eria",
         "type": "Effect Monster"
     },
+    "68881650": {
+        "name": "Familiar-Possessed - Eria",
+        "type": "Effect Monster"
+    },
     "4376658": {
+        "name": "Familiar-Possessed - Hiita",
+        "type": "Effect Monster"
+    },
+    "4376659": {
         "name": "Familiar-Possessed - Hiita",
         "type": "Effect Monster"
     },
@@ -17071,7 +17315,15 @@
         "name": "Familiar-Possessed - Lyna",
         "type": "Effect Monster"
     },
+    "40542826": {
+        "name": "Familiar-Possessed - Lyna",
+        "type": "Effect Monster"
+    },
     "31764353": {
+        "name": "Familiar-Possessed - Wynn",
+        "type": "Effect Monster"
+    },
+    "31764354": {
         "name": "Familiar-Possessed - Wynn",
         "type": "Effect Monster"
     },
@@ -17088,6 +17340,10 @@
         "type": "Effect Monster"
     },
     "78661338": {
+        "name": "Fantastical Dragon Phantazmay",
+        "type": "Effect Monster"
+    },
+    "78661339": {
         "name": "Fantastical Dragon Phantazmay",
         "type": "Effect Monster"
     },
@@ -17220,6 +17476,10 @@
         "type": "Effect Monster"
     },
     "81172176": {
+        "name": "Fiend Comedian",
+        "type": "Trap Card"
+    },
+    "81172177": {
         "name": "Fiend Comedian",
         "type": "Trap Card"
     },
@@ -17404,6 +17664,10 @@
         "type": "Skill Card"
     },
     "73134082": {
+        "name": "Final Flame",
+        "type": "Spell Card"
+    },
+    "73134081": {
         "name": "Final Flame",
         "type": "Spell Card"
     },
@@ -17647,6 +17911,14 @@
         "name": "Firewall Dragon",
         "type": "Link Monster"
     },
+    "5043012": {
+        "name": "Firewall Dragon",
+        "type": "Link Monster"
+    },
+    "5043011": {
+        "name": "Firewall Dragon",
+        "type": "Link Monster"
+    },
     "68934651": {
         "name": "Firewall Dragon Darkfluid",
         "type": "Link Monster"
@@ -17783,6 +18055,10 @@
         "name": "Five-Headed Dragon",
         "type": "Fusion Monster"
     },
+    "99267151": {
+        "name": "Five-Headed Dragon",
+        "type": "Fusion Monster"
+    },
     "10669138": {
         "name": "Five-Headed Link Dragon",
         "type": "Link Monster"
@@ -17840,6 +18116,10 @@
         "type": "Trap Card"
     },
     "45231177": {
+        "name": "Flame Swordsman",
+        "type": "Fusion Monster"
+    },
+    "45231178": {
         "name": "Flame Swordsman",
         "type": "Fusion Monster"
     },
@@ -18155,6 +18435,10 @@
         "name": "Fluff Token",
         "type": "Token"
     },
+    "15341823": {
+        "name": "Fluff Token",
+        "type": "Token"
+    },
     "45215225": {
         "name": "Fluffal Angel",
         "type": "Pendulum Effect Monster"
@@ -18296,6 +18580,10 @@
         "type": "Effect Monster"
     },
     "81439173": {
+        "name": "Foolish Burial",
+        "type": "Spell Card"
+    },
+    "81439174": {
         "name": "Foolish Burial",
         "type": "Spell Card"
     },
@@ -19223,6 +19511,10 @@
         "name": "Gaia The Fierce Knight",
         "type": "Normal Monster"
     },
+    "6368039": {
+        "name": "Gaia The Fierce Knight",
+        "type": "Normal Monster"
+    },
     "50354944": {
         "name": "Gaia the Fierce Knight Origin",
         "type": "Effect Monster"
@@ -19895,6 +20187,10 @@
         "name": "Gemini Elf",
         "type": "Normal Monster"
     },
+    "69140099": {
+        "name": "Gemini Elf",
+        "type": "Normal Monster"
+    },
     "67688478": {
         "name": "Gemini Imps",
         "type": "Effect Monster"
@@ -20203,6 +20499,10 @@
         "name": "Ghost Belle & Haunted Mansion",
         "type": "Tuner Monster"
     },
+    "73642297": {
+        "name": "Ghost Belle & Haunted Mansion",
+        "type": "Tuner Monster"
+    },
     "15419596": {
         "name": "Ghost Bird of Bewitchment",
         "type": "Effect Monster"
@@ -20247,6 +20547,10 @@
         "name": "Ghost Mourner & Moonlit Chill",
         "type": "Tuner Monster"
     },
+    "52038442": {
+        "name": "Ghost Mourner & Moonlit Chill",
+        "type": "Tuner Monster"
+    },
     "67113830": {
         "name": "Ghost of a Grudge",
         "type": "Trap Card"
@@ -20255,7 +20559,15 @@
         "name": "Ghost Ogre & Snow Rabbit",
         "type": "Tuner Monster"
     },
+    "59438931": {
+        "name": "Ghost Ogre & Snow Rabbit",
+        "type": "Tuner Monster"
+    },
     "62015408": {
+        "name": "Ghost Reaper & Winter Cherries",
+        "type": "Tuner Monster"
+    },
+    "62015409": {
         "name": "Ghost Reaper & Winter Cherries",
         "type": "Tuner Monster"
     },
@@ -20264,6 +20576,10 @@
         "type": "Effect Monster"
     },
     "60643553": {
+        "name": "Ghost Sister & Spooky Dogwood",
+        "type": "Tuner Monster"
+    },
+    "60643554": {
         "name": "Ghost Sister & Spooky Dogwood",
         "type": "Tuner Monster"
     },
@@ -20612,6 +20928,10 @@
         "type": "Effect Monster"
     },
     "36354007": {
+        "name": "Gilford the Lightning",
+        "type": "Effect Monster"
+    },
+    "36354008": {
         "name": "Gilford the Lightning",
         "type": "Effect Monster"
     },
@@ -21667,6 +21987,10 @@
         "name": "Gouki The Great Ogre",
         "type": "Link Monster"
     },
+    "78437365": {
+        "name": "Gouki The Great Ogre",
+        "type": "Link Monster"
+    },
     "30286474": {
         "name": "Gouki The Master Ogre",
         "type": "Link Monster"
@@ -22607,6 +22931,10 @@
         "name": "Gyakutenno Megami",
         "type": "Normal Monster"
     },
+    "31122091": {
+        "name": "Gyakutenno Megami",
+        "type": "Normal Monster"
+    },
     "18325492": {
         "name": "Gyroid",
         "type": "Effect Monster"
@@ -22840,6 +23168,10 @@
         "type": "Effect Monster"
     },
     "18144507": {
+        "name": "Harpie's Feather Duster",
+        "type": "Spell Card"
+    },
+    "18144506": {
         "name": "Harpie's Feather Duster",
         "type": "Spell Card"
     },
@@ -23707,6 +24039,18 @@
         "name": "Hippo Token",
         "type": "Token"
     },
+    "11050417": {
+        "name": "Hippo Token",
+        "type": "Token"
+    },
+    "11050418": {
+        "name": "Hippo Token",
+        "type": "Token"
+    },
+    "11050419": {
+        "name": "Hippo Token",
+        "type": "Token"
+    },
     "81863068": {
         "name": "Hiro's Shadow Scout",
         "type": "Flip Effect Monster"
@@ -24112,6 +24456,10 @@
         "type": "Spell Card"
     },
     "65741786": {
+        "name": "I:P Masquerena",
+        "type": "Link Monster"
+    },
+    "65741787": {
         "name": "I:P Masquerena",
         "type": "Link Monster"
     },
@@ -25535,6 +25883,10 @@
         "name": "Jinzo",
         "type": "Effect Monster"
     },
+    "77585514": {
+        "name": "Jinzo",
+        "type": "Effect Monster"
+    },
     "51916032": {
         "name": "Jinzo - Jector",
         "type": "Effect Monster"
@@ -26627,6 +26979,10 @@
         "name": "Knightmare Unicorn",
         "type": "Link Monster"
     },
+    "38342336": {
+        "name": "Knightmare Unicorn",
+        "type": "Link Monster"
+    },
     "39037517": {
         "name": "Koa'ki Meiru Beetle",
         "type": "Effect Monster"
@@ -26943,6 +27299,10 @@
         "name": "Kunai with Chain",
         "type": "Trap Card"
     },
+    "37390590": {
+        "name": "Kunai with Chain",
+        "type": "Trap Card"
+    },
     "56514812": {
         "name": "Kunoichi",
         "type": "Effect Monster"
@@ -26976,6 +27336,14 @@
         "type": "Effect Monster"
     },
     "40640057": {
+        "name": "Kuriboh",
+        "type": "Effect Monster"
+    },
+    "40640058": {
+        "name": "Kuriboh",
+        "type": "Effect Monster"
+    },
+    "40640059": {
         "name": "Kuriboh",
         "type": "Effect Monster"
     },
@@ -27044,6 +27412,10 @@
         "type": "Effect Monster"
     },
     "97590747": {
+        "name": "La Jinn the Mystical Genie of the Lamp",
+        "type": "Normal Monster"
+    },
+    "97590748": {
         "name": "La Jinn the Mystical Genie of the Lamp",
         "type": "Normal Monster"
     },
@@ -27163,6 +27535,10 @@
         "name": "Lamb Token",
         "type": "Token"
     },
+    "60764583": {
+        "name": "Lamb Token",
+        "type": "Token"
+    },
     "84900597": {
         "name": "Lamia",
         "type": "Effect Monster"
@@ -27251,6 +27627,10 @@
         "name": "Last Day of Witch",
         "type": "Spell Card"
     },
+    "90330454": {
+        "name": "Last Day of Witch",
+        "type": "Spell Card"
+    },
     "300202005": {
         "name": "Last Gamble",
         "type": "Skill Card"
@@ -27296,6 +27676,10 @@
         "type": "Effect Monster"
     },
     "87322377": {
+        "name": "Launcher Spider",
+        "type": "Normal Monster"
+    },
+    "87322378": {
         "name": "Launcher Spider",
         "type": "Normal Monster"
     },
@@ -28332,6 +28716,10 @@
         "type": "Skill Card"
     },
     "7852509": {
+        "name": "Loop of Destruction",
+        "type": "Trap Card"
+    },
+    "7852510": {
         "name": "Loop of Destruction",
         "type": "Trap Card"
     },
@@ -31407,6 +31795,10 @@
         "name": "Metalmorph",
         "type": "Trap Card"
     },
+    "68540058": {
+        "name": "Metalmorph",
+        "type": "Trap Card"
+    },
     "32472237": {
         "name": "Metalrokket Dragon",
         "type": "Effect Monster"
@@ -31684,6 +32076,10 @@
         "type": "Effect Monster"
     },
     "32012841": {
+        "name": "Millennium Shield",
+        "type": "Normal Monster"
+    },
+    "32012842": {
         "name": "Millennium Shield",
         "type": "Normal Monster"
     },
@@ -32383,6 +32779,10 @@
         "name": "Monster Reborn",
         "type": "Spell Card"
     },
+    "83764718": {
+        "name": "Monster Reborn",
+        "type": "Spell Card"
+    },
     "50213848": {
         "name": "Monster Reborn Reborn",
         "type": "Spell Card"
@@ -32936,6 +33336,10 @@
         "type": "Effect Monster"
     },
     "83011278": {
+        "name": "Mystic Tomato",
+        "type": "Effect Monster"
+    },
+    "83011277": {
         "name": "Mystic Tomato",
         "type": "Effect Monster"
     },
@@ -34451,6 +34855,10 @@
         "name": "Number 34: Terror-Byte",
         "type": "XYZ Monster"
     },
+    "32003339": {
+        "name": "Number 34: Terror-Byte",
+        "type": "XYZ Monster"
+    },
     "90162951": {
         "name": "Number 35: Ravenous Tarantula",
         "type": "XYZ Monster"
@@ -34468,6 +34876,10 @@
         "type": "XYZ Monster"
     },
     "84013237": {
+        "name": "Number 39: Utopia",
+        "type": "XYZ Monster"
+    },
+    "84013238": {
         "name": "Number 39: Utopia",
         "type": "XYZ Monster"
     },
@@ -34500,6 +34912,10 @@
         "type": "XYZ Monster"
     },
     "90590303": {
+        "name": "Number 41: Bagooska the Terribly Tired Tapir",
+        "type": "XYZ Monster"
+    },
+    "90590304": {
         "name": "Number 41: Bagooska the Terribly Tired Tapir",
         "type": "XYZ Monster"
     },
@@ -35031,6 +35447,14 @@
         "name": "Obelisk the Tormentor",
         "type": "Effect Monster"
     },
+    "10000001": {
+        "name": "Obelisk the Tormentor",
+        "type": "Effect Monster"
+    },
+    "10000002": {
+        "name": "Obelisk the Tormentor",
+        "type": "Effect Monster"
+    },
     "56713552": {
         "name": "Obese Marmot of Nefariousness",
         "type": "Normal Monster"
@@ -35135,6 +35559,14 @@
         "name": "Odd-Eyes Pendulum Dragon",
         "type": "Pendulum Effect Monster"
     },
+    "16178682": {
+        "name": "Odd-Eyes Pendulum Dragon",
+        "type": "Pendulum Effect Monster"
+    },
+    "16178683": {
+        "name": "Odd-Eyes Pendulum Dragon",
+        "type": "Pendulum Effect Monster"
+    },
     "66425726": {
         "name": "Odd-Eyes Pendulumgraph Dragon",
         "type": "Pendulum Effect Ritual Monster"
@@ -35212,6 +35644,10 @@
         "type": "Trap Card"
     },
     "19230408": {
+        "name": "Offerings to the Doomed",
+        "type": "Spell Card"
+    },
+    "19230407": {
         "name": "Offerings to the Doomed",
         "type": "Spell Card"
     },
@@ -35324,6 +35760,22 @@
         "type": "Effect Monster"
     },
     "14470846": {
+        "name": "Ojama Token",
+        "type": "Token"
+    },
+    "14470847": {
+        "name": "Ojama Token",
+        "type": "Token"
+    },
+    "29843092": {
+        "name": "Ojama Token",
+        "type": "Token"
+    },
+    "29843093": {
+        "name": "Ojama Token",
+        "type": "Token"
+    },
+    "29843094": {
         "name": "Ojama Token",
         "type": "Token"
     },
@@ -35683,6 +36135,10 @@
         "name": "Otohime",
         "type": "Spirit Monster"
     },
+    "39751093": {
+        "name": "Otohime",
+        "type": "Spirit Monster"
+    },
     "72782945": {
         "name": "Otonari Thunder",
         "type": "Effect Monster"
@@ -35951,6 +36407,10 @@
         "name": "Paleozoic Anomalocaris",
         "type": "XYZ Monster"
     },
+    "61307543": {
+        "name": "Paleozoic Anomalocaris",
+        "type": "XYZ Monster"
+    },
     "36346532": {
         "name": "Paleozoic Cambroraster",
         "type": "Link Monster"
@@ -36035,6 +36495,10 @@
         "name": "Panther Warrior",
         "type": "Effect Monster"
     },
+    "42035045": {
+        "name": "Panther Warrior",
+        "type": "Effect Monster"
+    },
     "72959823": {
         "name": "Panzer Dragon",
         "type": "Fusion Monster"
@@ -36100,6 +36564,10 @@
         "type": "Pendulum Effect Monster"
     },
     "27911549": {
+        "name": "Parasite Paracide",
+        "type": "Flip Effect Monster"
+    },
+    "27911550": {
         "name": "Parasite Paracide",
         "type": "Flip Effect Monster"
     },
@@ -36248,6 +36716,10 @@
         "type": "Spell Card"
     },
     "24433920": {
+        "name": "Pendulum Machine",
+        "type": "Normal Monster"
+    },
+    "24433921": {
         "name": "Pendulum Machine",
         "type": "Normal Monster"
     },
@@ -37508,6 +37980,10 @@
         "type": "Gemini Monster"
     },
     "24094653": {
+        "name": "Polymerization",
+        "type": "Spell Card"
+    },
+    "27847700": {
         "name": "Polymerization",
         "type": "Spell Card"
     },
@@ -39995,6 +40471,26 @@
         "name": "Red-Eyes Black Dragon",
         "type": "Normal Monster"
     },
+    "74677423": {
+        "name": "Red-Eyes Black Dragon",
+        "type": "Normal Monster"
+    },
+    "74677424": {
+        "name": "Red-Eyes Black Dragon",
+        "type": "Normal Monster"
+    },
+    "74677425": {
+        "name": "Red-Eyes Black Dragon",
+        "type": "Normal Monster"
+    },
+    "74677426": {
+        "name": "Red-Eyes Black Dragon",
+        "type": "Normal Monster"
+    },
+    "74677427": {
+        "name": "Red-Eyes Black Dragon",
+        "type": "Normal Monster"
+    },
     "19747827": {
         "name": "Red-Eyes Black Dragon Sword",
         "type": "Fusion Monster"
@@ -40008,6 +40504,10 @@
         "type": "Effect Monster"
     },
     "64335805": {
+        "name": "Red-Eyes Black Metal Dragon",
+        "type": "Effect Monster"
+    },
+    "64335804": {
         "name": "Red-Eyes Black Metal Dragon",
         "type": "Effect Monster"
     },
@@ -40028,6 +40528,10 @@
         "type": "Effect Monster"
     },
     "88264978": {
+        "name": "Red-Eyes Darkness Metal Dragon",
+        "type": "Effect Monster"
+    },
+    "88264979": {
         "name": "Red-Eyes Darkness Metal Dragon",
         "type": "Effect Monster"
     },
@@ -40447,6 +40951,10 @@
         "name": "Rescue Cat",
         "type": "Effect Monster"
     },
+    "14878872": {
+        "name": "Rescue Cat",
+        "type": "Effect Monster"
+    },
     "56343672": {
         "name": "Rescue Ferret",
         "type": "Effect Monster"
@@ -40863,6 +41371,10 @@
         "name": "Ring of Destruction",
         "type": "Trap Card"
     },
+    "83555667": {
+        "name": "Ring of Destruction",
+        "type": "Trap Card"
+    },
     "20436034": {
         "name": "Ring of Magnetism",
         "type": "Spell Card"
@@ -41056,6 +41568,10 @@
         "type": "Effect Monster"
     },
     "95658967": {
+        "name": "Ritual Sanctuary",
+        "type": "Spell Card"
+    },
+    "20250830": {
         "name": "Ritual Sanctuary",
         "type": "Spell Card"
     },
@@ -41948,6 +42464,10 @@
         "type": "Trap Card"
     },
     "41463181": {
+        "name": "Salamangreat Heatleo",
+        "type": "Link Monster"
+    },
+    "41463182": {
         "name": "Salamangreat Heatleo",
         "type": "Link Monster"
     },
@@ -42891,6 +43411,10 @@
         "name": "Senju of the Thousand Hands",
         "type": "Effect Monster"
     },
+    "23401840": {
+        "name": "Senju of the Thousand Hands",
+        "type": "Effect Monster"
+    },
     "62503746": {
         "name": "Senko the Skybolt Star",
         "type": "Effect Monster"
@@ -43231,6 +43755,18 @@
         "name": "Sheep Token",
         "type": "Token"
     },
+    "73915053": {
+        "name": "Sheep Token",
+        "type": "Token"
+    },
+    "73915054": {
+        "name": "Sheep Token",
+        "type": "Token"
+    },
+    "73915055": {
+        "name": "Sheep Token",
+        "type": "Token"
+    },
     "10163855": {
         "name": "Shell Knight",
         "type": "Effect Monster"
@@ -43432,6 +43968,10 @@
         "type": "Trap Card"
     },
     "25415053": {
+        "name": "Shinobird Token",
+        "type": "Token"
+    },
+    "52900001": {
         "name": "Shinobird Token",
         "type": "Token"
     },
@@ -44171,6 +44711,10 @@
         "name": "Sky Striker Ace - Kagari",
         "type": "Link Monster"
     },
+    "63288574": {
+        "name": "Sky Striker Ace - Kagari",
+        "type": "Link Monster"
+    },
     "12421694": {
         "name": "Sky Striker Ace - Kaina",
         "type": "Link Monster"
@@ -44304,6 +44848,14 @@
         "type": "Fusion Monster"
     },
     "10000020": {
+        "name": "Slifer the Sky Dragon",
+        "type": "Effect Monster"
+    },
+    "10000021": {
+        "name": "Slifer the Sky Dragon",
+        "type": "Effect Monster"
+    },
+    "10000022": {
         "name": "Slifer the Sky Dragon",
         "type": "Effect Monster"
     },
@@ -44783,6 +45335,10 @@
         "name": "Soul of the Pure",
         "type": "Spell Card"
     },
+    "47852925": {
+        "name": "Soul of the Pure",
+        "type": "Spell Card"
+    },
     "76840111": {
         "name": "Soul of the Supreme Celestial King",
         "type": "Trap Card"
@@ -45216,6 +45772,10 @@
         "type": "Trap Card"
     },
     "18807109": {
+        "name": "Spellbinding Circle",
+        "type": "Trap Card"
+    },
+    "18807108": {
         "name": "Spellbinding Circle",
         "type": "Trap Card"
     },
@@ -45939,6 +46499,10 @@
         "name": "Stardust Dragon",
         "type": "Synchro Monster"
     },
+    "44508095": {
+        "name": "Stardust Dragon",
+        "type": "Synchro Monster"
+    },
     "61257789": {
         "name": "Stardust Dragon/Assault Mode",
         "type": "Effect Monster"
@@ -46124,6 +46688,10 @@
         "type": "Pendulum Effect Fusion Monster"
     },
     "41209827": {
+        "name": "Starving Venom Fusion Dragon",
+        "type": "Fusion Monster"
+    },
+    "41209828": {
         "name": "Starving Venom Fusion Dragon",
         "type": "Fusion Monster"
     },
@@ -46672,6 +47240,18 @@
         "type": "Spell Card"
     },
     "70781052": {
+        "name": "Summoned Skull",
+        "type": "Normal Monster"
+    },
+    "70781053": {
+        "name": "Summoned Skull",
+        "type": "Normal Monster"
+    },
+    "70781054": {
+        "name": "Summoned Skull",
+        "type": "Normal Monster"
+    },
+    "70781055": {
         "name": "Summoned Skull",
         "type": "Normal Monster"
     },
@@ -48179,6 +48759,10 @@
         "name": "Taunt",
         "type": "Trap Card"
     },
+    "90740330": {
+        "name": "Taunt",
+        "type": "Trap Card"
+    },
     "33779875": {
         "name": "Teardrop the Rikka Queen",
         "type": "XYZ Monster"
@@ -48947,6 +49531,10 @@
         "name": "The Forgiving Maiden",
         "type": "Effect Monster"
     },
+    "84080938": {
+        "name": "The Forgiving Maiden",
+        "type": "Effect Monster"
+    },
     "92223641": {
         "name": "The Fountain in the Sky",
         "type": "Spell Card"
@@ -49571,6 +50159,14 @@
         "name": "The Winged Dragon of Ra",
         "type": "Effect Monster"
     },
+    "10000011": {
+        "name": "The Winged Dragon of Ra",
+        "type": "Effect Monster"
+    },
+    "10000012": {
+        "name": "The Winged Dragon of Ra",
+        "type": "Effect Monster"
+    },
     "10000090": {
         "name": "The Winged Dragon of Ra - Immortal Phoenix",
         "type": "Effect Monster"
@@ -49708,6 +50304,10 @@
         "type": "Synchro Monster"
     },
     "41462083": {
+        "name": "Thousand Dragon",
+        "type": "Fusion Monster"
+    },
+    "41462084": {
         "name": "Thousand Dragon",
         "type": "Fusion Monster"
     },
@@ -49936,6 +50536,10 @@
         "type": "Spell Card"
     },
     "49791927": {
+        "name": "Tiger Axe",
+        "type": "Normal Monster"
+    },
+    "49791928": {
         "name": "Tiger Axe",
         "type": "Normal Monster"
     },
@@ -50387,6 +50991,10 @@
         "name": "Toon World",
         "type": "Spell Card"
     },
+    "15259704": {
+        "name": "Toon World",
+        "type": "Spell Card"
+    },
     "53623827": {
         "name": "Top Runner",
         "type": "Tuner Monster"
@@ -50495,6 +51103,10 @@
         "name": "Tour Guide From the Underworld",
         "type": "Effect Monster"
     },
+    "10802916": {
+        "name": "Tour Guide From the Underworld",
+        "type": "Effect Monster"
+    },
     "62784717": {
         "name": "Tour of Doom",
         "type": "Trap Card"
@@ -50556,6 +51168,10 @@
         "type": "Link Monster"
     },
     "35686188": {
+        "name": "Tragedy",
+        "type": "Trap Card"
+    },
+    "35686187": {
         "name": "Tragedy",
         "type": "Trap Card"
     },
@@ -51104,6 +51720,10 @@
         "type": "Spell Card"
     },
     "32448765": {
+        "name": "Trickstar Holly Angel",
+        "type": "Link Monster"
+    },
+    "32448766": {
         "name": "Trickstar Holly Angel",
         "type": "Link Monster"
     },
@@ -51872,6 +52492,10 @@
         "type": "Effect Monster"
     },
     "80604092": {
+        "name": "Ultimate Offering",
+        "type": "Trap Card"
+    },
+    "80604091": {
         "name": "Ultimate Offering",
         "type": "Trap Card"
     },
@@ -53183,6 +53807,10 @@
         "name": "Viser Des",
         "type": "Effect Monster"
     },
+    "56043446": {
+        "name": "Viser Des",
+        "type": "Effect Monster"
+    },
     "78556320": {
         "name": "Vishwar Randi",
         "type": "Normal Monster"
@@ -53412,6 +54040,10 @@
         "type": "Effect Monster"
     },
     "14898066": {
+        "name": "Vorse Raider",
+        "type": "Normal Monster"
+    },
+    "14898067": {
         "name": "Vorse Raider",
         "type": "Normal Monster"
     },
@@ -53843,6 +54475,10 @@
         "name": "Wattcancel",
         "type": "Trap Card"
     },
+    "56993277": {
+        "name": "Wattcancel",
+        "type": "Trap Card"
+    },
     "95084054": {
         "name": "Wattcannon",
         "type": "Trap Card"
@@ -54247,6 +54883,10 @@
         "name": "Widespread Ruin",
         "type": "Trap Card"
     },
+    "77754945": {
+        "name": "Widespread Ruin",
+        "type": "Trap Card"
+    },
     "10705656": {
         "name": "Widget Kid",
         "type": "Effect Monster"
@@ -54484,6 +55124,10 @@
         "type": "Normal Monster"
     },
     "57116033": {
+        "name": "Winged Kuriboh",
+        "type": "Effect Monster"
+    },
+    "57116034": {
         "name": "Winged Kuriboh",
         "type": "Effect Monster"
     },
@@ -55400,6 +56044,14 @@
         "type": "Trap Card"
     },
     "91998119": {
+        "name": "XYZ-Dragon Cannon",
+        "type": "Fusion Monster"
+    },
+    "91998120": {
+        "name": "XYZ-Dragon Cannon",
+        "type": "Fusion Monster"
+    },
+    "91998121": {
         "name": "XYZ-Dragon Cannon",
         "type": "Fusion Monster"
     },
