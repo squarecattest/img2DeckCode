@@ -57,7 +57,7 @@ python ./main.py
 
 ```bash
 cd web
-ngrok http 8000
+./ngrok.exe http 8000
 ```
 
 Use the generated ngrok URL to access the web interface or call the API remotely.
