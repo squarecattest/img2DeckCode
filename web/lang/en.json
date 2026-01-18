@@ -1,6 +1,6 @@
 {
     "title": "Deck Recognizer",
-    "desc": "Upload screenshots to get structured data and Neuron codes.",
+    "desc": "Upload screenshots to get structured data and Neuron deck ID.",
     "mode_label": "Recognition Mode",
     "mode_grid": "Auto Grid Inference (All Resolutions)",
     "mode_fixed": "WIP: 60-Card Mode (Fixed Calibration)",
