@@ -229,7 +229,9 @@ class CardRecognizer:
             if art is not None:
                 cv2.imwrite(str(debug_path / f"Slot_{i+1:02d}_{self._sanitize_filename(match['name'])}_final_P{match['p_dist']}.jpg"), art)
             
-            if progress_callback: await progress_callback(i + 1, len(grid)); await asyncio.sleep(0)
+            if progress_callback: 
+                await progress_callback(i + 1, len(grid), match['name']) 
+                await asyncio.sleep(0)
 
         final_json = self._format_output(raw_results, user_id)
         cv2.imwrite(str(debug_path / "_full_grid.jpg"), canvas)

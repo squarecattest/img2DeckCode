@@ -1,0 +1,239 @@
+:root {
+    --primary: #7d5fff; 
+    --bg: #1e1e26;
+    --card: #ffffff;
+    --text: #1d1d1f;
+    --border: #d2d2d7;
+}
+
+/* 核心重置：確保所有元素的寬度計算都包含邊框與內距 */
+* { 
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 120px;
+    overflow-x: hidden; /* 防止全域橫向捲動 */
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    background: var(--card);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    position: relative;
+}
+
+header { 
+    text-align: center; 
+    margin-bottom: 30px; 
+}
+
+h1 { margin: 0; font-size: 26px; }
+.desc { color: #86868b; font-size: 14px; margin-top: 5px; }
+
+/* --- 浮動資訊 (電腦版) --- */
+.floating-info {
+    position: fixed;
+    right: 25px; 
+    top: 25%;
+    transform: translateY(-50%);
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 160px;
+    z-index: 100;
+}
+
+.avatar-container {
+    width: 70px; 
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+    overflow: hidden;
+    background: #eee;
+}
+
+.avatar { width: 100%; height: 100%; object-fit: cover; }
+.floating-info span { font-weight: 700; font-size: 14px; color: #333; }
+.floating-info a { 
+    text-decoration: none; 
+    color: var(--primary); 
+    font-size: 13px; 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+}
+
+/* --- 配置區與選單 --- */
+.config-section { 
+    background: #fafafa; 
+    padding: 20px; 
+    border-radius: 12px; 
+    border: 1px solid var(--border); 
+    margin-bottom: 20px; 
+}
+
+.control-group { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+label { 
+    font-weight: 600; 
+    min-width: 80px; 
+    white-space: nowrap;
+}
+
+select { 
+    flex: 1; 
+    padding: 10px; 
+    border-radius: 8px; 
+    border: 1px solid var(--border); 
+    font-size: 15px; 
+    background-color: white;
+    cursor: pointer;
+    width: 100%; /* 確保手機版撐滿 */
+    max-width: 100%;
+}
+
+.upload-area {
+    border: 2px dashed var(--border);
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    background: white;
+    border-radius: 12px;
+    transition: 0.2s;
+    overflow: hidden;
+}
+
+.upload-area:hover {
+    border-color: var(--primary);
+    background: #f8f7ff;
+}
+
+#previewImg, #fullGridImg {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 15px;
+    display: none;
+}
+
+button {
+    width: 100%; 
+    padding: 16px;
+    background: var(--primary);
+    color: white; 
+    border: none;
+    border-radius: 12px; 
+    font-size: 17px; 
+    font-weight: 600;
+    cursor: pointer; 
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+
+button:hover { background: #6646e5; }
+button:disabled { background: #d2d2d7; cursor: not-allowed; }
+
+/* --- 進度條 --- */
+.progress-box { display: none; margin: 25px 0; }
+.progress-container { width: 100%; height: 10px; background: #e5e5e5; border-radius: 5px; overflow: hidden; }
+.progress-bar { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s ease; }
+.progress-info { display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; color: #6e6e73; }
+
+/* --- 結果清單 (Prism 整合) --- */
+.results-section { 
+    margin-top: 30px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 25px; 
+}
+
+.result-card { display: none; }
+h3 { font-size: 18px; margin-bottom: 12px; padding-left: 10px; border-left: 4px solid var(--primary); }
+
+/* 覆寫 Prism 預設樣式：支援橫向滑動且不撐破螢幕 */
+pre[class*="language-"] {
+    background: #1d1d1f !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    border-radius: 12px !important;
+    white-space: pre !important;    /* 關鍵：強制不換行 */
+    overflow-x: auto !important;    /* 關鍵：開啟內部橫向滑桿 */
+    font-size: 13px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* 捲軸美化 (Chrome/Safari) */
+pre[class*="language-"]::-webkit-scrollbar { height: 8px; }
+pre[class*="language-"]::-webkit-scrollbar-track { background: #1d1d1f; }
+pre[class*="language-"]::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+pre[class*="language-"]::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* --- 手機版適應 (1150px 以下) --- */
+@media (max-width: 1150px) {
+    body { 
+        padding: 10px; 
+        padding-bottom: 100px; 
+    }
+
+    .container { 
+        padding: 20px; 
+    }
+
+    /* 修正選單溢出：改為垂直撐滿佈局 */
+    .control-group { 
+        flex-direction: column; 
+        align-items: stretch; 
+        gap: 8px; 
+    }
+
+    label {
+        min-width: unset;
+        font-size: 14px;
+    }
+
+    /* 底部浮動橫條 */
+    .floating-info {
+        position: fixed; 
+        top: auto; 
+        bottom: 0; 
+        left: 0; 
+        right: 0;
+        transform: none; 
+        width: 100%; 
+        flex-direction: row; 
+        justify-content: center; 
+        padding: 10px; 
+        border-radius: 0;
+        background: rgba(255, 255, 255, 0.98); 
+        border-top: 1px solid var(--border);
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        height: 60px;
+    }
+
+    .avatar-container { width: 35px; height: 35px; border-width: 2px; }
+    .floating-info span { font-size: 12px; }
+    .floating-info a { font-size: 11px; }
+}

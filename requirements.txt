@@ -3,7 +3,7 @@ uvicorn
 python-multipart
 websockets
 opencv-python>=4.10.0
-numpy
+numpy<=2.0.0
 imagehash
 pillow
 requests

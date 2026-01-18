@@ -7,9 +7,9 @@ from fastapi import FastAPI, WebSocket, Query, UploadFile, File
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
-
-WEB_DIR = Path(__file__).parent.absolute()      
-BASE_DIR = WEB_DIR.parent.absolute()            
+ 
+BASE_DIR = Path(__file__).parent.absolute()      
+WEB_DIR = BASE_DIR / "web"      
 OUTPUT_DIR = BASE_DIR / "output"
 DATA_DIR = BASE_DIR / "data"
 
@@ -53,12 +53,13 @@ async def websocket_endpoint(websocket: WebSocket, mode: str = Query("GRID")):
             await websocket.send_json({"type": "error", "message": "影像解碼失敗"})
             return
 
-        async def progress_callback(current, total):
+        async def progress_callback(current, total, card_name="辨識中..."):
             await websocket.send_json({
                 "type": "progress", 
                 "current": current, 
                 "total": total, 
-                "percent": int(current/total*100)
+                "percent": int(current/total*100),
+                "card_name": card_name
             })
 
         # 呼叫核心辨識邏輯
@@ -107,5 +108,4 @@ async def api_recognize(mode: str = "GRID", file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     import uvicorn
-    # 注意：reload=True 在開發時很有用，但如果是正式環境請關閉
-    uvicorn.run("web.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
