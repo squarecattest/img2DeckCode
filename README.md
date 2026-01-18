@@ -1,4 +1,4 @@
-Master Duel Deck Code Converter
+Master Duel Deck Recognizer
 ===
 ## 🚀 Overview
 
