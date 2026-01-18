@@ -3,9 +3,10 @@ uvicorn
 python-multipart
 websockets
 opencv-python>=4.10.0
-numpy<2.0.0 --only-binary=:all:
+numpy
 imagehash
 pillow
 requests
 tqdm
 aiohttp
+py-cord
