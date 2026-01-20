@@ -10,5 +10,37 @@
             "zh-TW": "牌組截圖",
             "ja": "デッキのスクショ"
         }
+    },
+    "yugioh": {
+        "deck": {
+            "en-US": "My Deck",
+            "ja": "マイデッキ",
+            "zh-TW": "My Deck"
+        },
+        "main_deck": {
+            "en-US": "Main Deck",
+            "ja": "デッキ",
+            "zh-TW": "牌組"
+        },
+        "extra_deck": {
+            "en-US": "Extra Deck",
+            "ja": "EXデッキ",
+            "zh-TW": "額外牌組"
+        },
+        "monster_card": {
+            "en-US": "Monster Cards",
+            "ja": "モンスターカード",
+            "zh-TW": "怪獸卡"
+        },
+        "spell_card": {
+            "en-US": "Spell Cards",
+            "ja": "魔法カード",
+            "zh-TW": "魔法卡"
+        },
+        "trap_card": {
+            "en-US": "Trap Cards",
+            "ja": "罠カード",
+            "zh-TW": "陷阱卡"
+        }
     }
 }
